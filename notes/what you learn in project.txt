@@ -1,0 +1,288 @@
+initially when someone open my website he will see the login page if he don't have account underneath of login button we have signup button for now i want if someone click on signup button he will redirect to signup page
+
+to achieve this thing follow the following steps 
+1)install the react router 
+2)import "create browser router" and "router provider" from react router dom in "main.jsx"
+3)also import Link from react router dom (in the component where the button is)
+4)create a constent in app.jsx name will be "router" and assign the "createBrowserRouter" function which is imported from react router dom
+5)inside the function create an empty array and inside the empty array add json and inside the json first property will be path and 2nd will be element 
+6)go inside the jsx use self closing routerprovider element attribute will be router and assign router as a javascript constent(which you just created) using jsx syntax
+7)now go to the component where the button is and inside the button tag add "Link" tag it is like "anchor" tag and instead of "href" you need to add "to"
+
+
+
+
+how to send 1 data of input in react 
+
+(if you have only 1 input in you webpage how you can send the value of the input to api endpoint)
+
+1)create a state initially it will be an empty string state
+2)add an input tag and add two more addtribute "value" stateName this will store the value of input in state
+3)add an arrtribute onChange store function function name could be anything 
+4)create a function before the return keyword because we are using it in onchange arrtribute i will have a parameter parameter name could be anything 
+5)inside the function update the state with the value from the input field
+6)underneath of it create another function and create button also underneath of the input and when anyone click on the button this function should be called that you just created and inside the function and show the current text in the input box in the console
+
+
+how to send data of multiple input in react 
+
+(if you have multiple input then the above method will not work what will be the problem if you enter something in input other input also get this the value 
+for example if you have two input and you use the above and you use the simple state in both input then i you type "hello" in 1st input then "hello" will also written in other input also )
+
+
+1) repeat the step how to send 1 data of input in react 
+2) now change the empty string of state with an object you will add property depending on you need (for example if i have two input for name and password ) so properties will be two "name" and "password" initailze with them with empty string in json style (if you have more input like "name" "password" "email"  you will add three initailze with empty string upto soon on)
+3)now give an attribute to input attribute will be "name" think like this is ID of each input to identify it uniquely assign with value value should match with the property that you have given in obj in state
+4)and as you know our state is an object so we have to select the property from object and store it in value attribute of input instead of storing the whole  object in value
+5)The handleClick function is triggered when a button is clicked. It gets the name of the input( hint: target) field that was used and the value the user typed. Then, it updates the state by keeping the other values(hint: spread operator with parameter) the same and changing the value for the specific input field. This way, the state always reflects what the user has entered. and also return function in setstate as a object
+6)now print the current state on console
+
+
+how to add validation in your website signup and login page
+
+1)create a state of "Error"
+2)in handleClick function create a empty obj it's declaration will be variable
+3)use if statement and condition will be statename obj where the every data is store get the property on which you want to add validation for example if you want to add validation on name you will get name property from obj and then apply trim function and them strict equality equal to empty string and inside the body add "name" property inside empty formErrors name property initialize with "Name is required"
+
+what is trim function 
+trim function is use to remove the extra spaces only from beginning and end of the string not in between
+
+
+4)now check for the password that if password do not exsist store password property initailze with the string "Password is required" just like you have done with the name 
+
+5)if password exsist then check for password must be 8 digit 1 uppercase 1 special symbol and number now underneath of password if create "else if" the condition will be (regex of 8 digit 1 uppercase 1 special number) you can search for it on google and also ask for the chatgpt to generate and you will the regex code in condition and enclose them in parenthesis and also enclose the regex in forword slash and apply text function in classes style give the argument to test function argument will be get the  
+password from statename and check if it is false then add "password" property in formError and initials it with password should contain 1 capital 1 special character and number and password should be 8 character long you can also add more if statement to show the user what exactly the problem is does your password is short of you haven't add special symbol or you have add number you will do it by yourself i believe on you 
+
+
+what is regex?
+Regex, or regular expressions, is like a special set of rules that helps you find and match patterns in text.
+
+6)you also need to add required validation on username also 
+7)you also need to add required validation on phone also and make sure the phone number starts with 92 you can ask for REGEX from chatgpt 
+
+8)After the writing the logic of every input you need set the state of error with the object that you have create in handleClick function 
+9)now add another if and condition will be object and get keys function (keys is the alternate name of properties of object) in class style and give argument argument will be obj that you have created remember and compare with strict equality 0 and inside the body print congratulation on console
+
+10)After writing the logic you need to go to the input and create new line and add javascript syntax and inside it add p tag and give class to change it's text color to red and in between p tag write javascript code and fetch the property from error state for example if you are working on name input and you will fetch name property if you are working on password you will fetch password from error state
+
+happy Hacking:)
+
+
+if you want to remove the validation error after sometime you need to use setTimeout make the error state empty after 3s
+
+
+
+
+now what i want to do that if user created successfully i want to redirect him/her to login page..
+
+according to the roshini api document when user created it will return the client ID and we don't know what will be the client-ID because we don't know how many client exsiste but we know it will return client ID property so we have to target it
+
+1)If we have a object for example {"Hello" : "World",}  then hello is the "key" and world is value and both of them are property of object
+2)object.keys function take argument object and return the keys of the object in this case if in object.keys if i give the above object  it will return me "Hello" because we only have 1 key so it will return only 1 if you have mutiple keys this will give you all of them you have to select the key which you want to chose by "indexing" after the keys function just like we do in array
+3)Now create and if statement after posting the data to api and inside the if condition will be get the (0 index) key will which comming as a response and and use lose equality  "cliet_id" then bring the user to login page
+4)as you know login page is at the  main entry point so inside the body of the if type window object and there's a property inside window is "location" you need to get this and inside the location we have "href" and you need to assign the url  as a string now the question is a)what is the url of main entry point?
+
+
+
+5)now inside this if create another if this is for show the alert to user customer is created successfully condition will be we will use window object location property and then href property and assign the main entry point location  (if the condition happend this will return true and body of the if start excuting) otherwise it will do nothing and we want that so inside the body of if you need to add alert and show "Customer has been created sucessfully"
+
+
+it will bring you to the login page 
+
+
+
+how to login the user 
+
+1) go to login.jsx and add try catch block and inside the try you will create constent and post the data using axios for api link of login check the documentation data is in inputLogin state
+2)don't forget to use aysn function otherwise it will not wait for the response 
+3)if everything goes well you will get the "token" and "client_id"
+4)now save the token in localstorage of browser remember every time user login token will be different and you need token everytime so store it in browser localStorage   localstorage key will be "token" 
+
+
+now if everything goes well and you get the token then you need to get data from api 
+
+check the documentation title is "Get User By ID"
+
+
+1)underneath of login api you will create an if statement and condition will be variable name in which you are storing the response coming from api "status" strictly equal to "200" then execute the body of "if" 
+"200" status mean everything is going well you need procced to next step 
+
+2)create variable and use axios to "get" information use url and endpoint you will find the endpoint on api documentation title of topic is "Get User By ID"
+
+3)end point is /api/users/{user_id}
+
+4)you will give the user_id from that  response that you are getting from previous api
+
+5)and you have to give the token that you have stored before you second parameter will be json and inside the json you will add object header and inside this object your key will be "Authorization" and value will be "Bearer" and javascript code to bring token from local storage
+
+6)now console the response of that api and there will be role-Id and add conditions underneath of it if role-id is 1 navigate the user to admin dashboard if role-id is 2 navigate the user to service provider dashboard if role-id is 3 navigate the user to customer dashboard if you don't know how to navigate the user to another page without page reloading scroll down little bit and you will get the logic
+
+so understand the analogy of 2nd parameter json think like you have to bring some food from outside and you don't have enough time to go out and bring the food but you have paid so you tell the restaurant keeper i'm sending someone who will get my food restaurant keeper said okay keyword is "bhailog" and you tell your servent you just need to go there and tell "bahilog" to them they will give you the food so the servent go there and tell the codeword "bahilog"
+and the restaurant keeper will give the food to him Authorization is just like the codeword and the codeword is token i hope you got point 
+
+
+
+
+
+now go to dashboard.jsx and add the logic that if someone go on the button of "more info" of "total query" 
+
+
+1)add onClick eventHandler and call function function name will be HandleQuery
+2)now import the useNavigate from react-router-dom
+3)create a variable and before the function(HandleQuery) that we haven't create yet variable name could be any thing initialize it with useNavigate function 
+
+Note: if we create a variable and initailze it with function then the variable is not longer variable now it is function 
+
+4) now create function (HandleQuery) underneath of this process of create variable a function 
+
+5)and inside the function write the variable (actually a function ) that you have create before and call this function and argument will be the the end point where you want to bring to user for example if i want to bring the user to dashboard page you end point will be "/dashboard" if you want to bring the user to login page then endpoint will be "/login" i hope you got the point
+
+5)now when someone click on the button it will redirect you to that point
+
+note: don't use the variable like function in onClick eventhandler attribute directly if you use directly it will bring the user to that end point even user didn't click on it if you want to see that thing you need to after loading the dashboard component make change and save and if you go back you will see you will on that page that you have given as endpoint in the variable like function so if you write it inside the function it will wait for the click otherwise it  will not wait for the click 
+
+
+now in the left aside of dashboard if someone click on dashboard he/she will see the dashboard and if someone click on client then he will redirected to client page now go and create the UI of client page 
+
+
+
+now you know that if someone click on dashboard navigate him/her to dashboard if someone click on client navigate him to client page and you can do it we have discussed about it already how to do it this type of work 
+
+problem :(  now i want when i'm entering credentials i'm getting the data of the user from api and in this api and we compare the role_id to navigate the user to "dashboard " we have "username" property also in that object which we are getting from api but the problem is we want to use that "username" property in "dashboard" component not in login component but i'm calling that that in login component 
+
+solution :) there are three solution here "prop drilling" "ContextAPI" "Redux" "Redux Toolkit"
+
+propDrilling is a concept in react which is used for State Managment
+ContextAPI is a concept in react which is used for state Management
+Redux is a library of javascript which is used for state Management
+
+let me give you an analogy to understand these concept and the difference between them
+
+for example you and your friend is 10year you both collect money to purchase a toy(State) now in the building(Application) you live in the room no 1(Componenet no 1) and your friend is in room no 10(Component no 10) and now your time to play with the toy is finish and your friend(in component 10 code want that state) is asking for the toy you cannot go to room no 10 because there is not loby all room is connected so you will give the toy(state) to room no 2(component no 2) to move forward to room no 3(state as a prop) then 4 then 5 then 6 .... and then 10 and then you frined will recieve the state as a prop this is called propdrilling this is good for small webapplication but not for bigone for example instead of 10 components let's say you have 100 component so it will take a lot of time to write state prop code and also it will slow down our app so this problem is solved by "contextAPI" and "Redux"
+
+
+Analogy the difference between "ContextAPI" and "Redux" 
+
+we will try to connect the prvious analogy you have toy(state) now you have multiple friends and you don't know where they are maybe someone is in room no 3 some 5 someone in 10 and you are in room no 1(component no 1) now your time is over instead of giving prop to each room(component) you have created a space in your building and said to all of your friend when anyone need this toys come here and grab the toy so contextAPI and redux do the same thing so redux creates redux store in webapp when any component need state go to reduxstore and get the state as a prop contextAPI do the same thing but contextAPI is for small webapp if your webapp have 100 component then you will use redux because it is a library and easy to manage i hope you got the point
+
+
+
+now what is reduxToolKit Listen contextAPI was doing great but if your webapp is big then it is really hard to manage contextapi code so then facebook create flux 
+
+
+
+what is flux? 
+
+so flux was a library created by facebook in which instead of created 1 store you can create multiple store which manege the states but the problem was that for each store you have write boilerplate code(boilerplate is the type of code which should be in every program or application) every time which do not follow the DRY(don't repeat yourself) so this problem is solved by redux
+
+
+what is redux?
+so redux is JS library (Note this thing this js library which mean you can use it with any framework or library many people think redux just use with react that wrong)so redux solve the problem by remove the concept of multiple store now you don't need to create multiple stores in webapp hence you don't need to write boilerplate code again and again but another problem arises write the code of all stores in 1 store result decrease maintainability so reduxToolkit solve this problem
+
+what is redux toolkit?
+so redux toolkit is a js library which solve the problem redux so in redux toolkit it create multiple store to increase maintainability and write the boilerplate code by itself which follow DRY(Don't repeat yourself) principle of code  
+
+
+
+question if you are fresher should you need to learn flux redux before learning redux toolkit 
+
+Absolutely not you can directly start leanring redux toolkit simple but you need to learn "prop drilling" and "contextAPI" because this is the concept of react they are not library
+
+
+
+
+now there are some concepts in redux toolkit "UI" "Action" "Reducer" "Slice"
+
+let me give you an analogy to clearify this thing for example UI is a baby and he is want to eat candy but his mama baba(Action) is very busy cannot fulfill their baby wish so they call the caretaker(Reducer) to bring the candy for their baby(UI) so caretaker(Reducer) go to the store(Store) and in store there are multiple portion you can say substors (for cloth candy toys etc) so slice will help the caretaker(reducer) to find the candy in store and then caretaker(Reducer) will give the candy to baby(UI)
+
+
+
+
+ 
+
+
+1)inside the src folder create a new folder it's name will be "store" 
+2)inside this "store" folder create "store.js" file and "slice.js"
+note:- store.js not store.jsx because reduxtoolkit use pure javascript 
+3)now go to main.jsx and bring the terminal up and install @reduxjs/toolkit and react-redux install these two packages
+4)import provider so this is not default export fromt react-redux and import store.js as store
+5)underneath of react wrap the "RouterProvide" and "app" seftclosing tags inside the opening and closing tag of "Provider" and give attribute "store" and assign "store" which you are importing from "store.jsx"
+6)now go to slice.js and import "createSlice" from @reduxjs/toolkit and this is not a default export 
+7)now create userSlice constent and initialize it with "createSlice" function which you are importing 
+8)and inside the createSlice function we will have parameter of object and inside this object we have three properties 
+9)1st property key will be "name" and value will be "user" and value always should be inside the single quote
+10)2nd property key will be "initailState" and it's value will also be another object and inside that object we have 1 property
+11)and inside the value object 1st property key is "userInfo" and value is null,
+12)now write the 3rd property of parent object and it's key is "reducers" and it's value is another object and inside that object we have 1 property 
+13)so 1st property key will be "setUser" and it's value will be arrow function and function have two parameter 1st is "state" and 2nd is "action" and inside the body and fetch "userinfo" from "state" in classStyle and initialize it with "payload" which we are fetching from "action" 
+14)now underneath of the constent which have a lot of object export constent and initials it with "actions" which is fetching from "userSlice" and constent name will be "setUser" and this is not default export so...
+15)and underneath of it export default reducer which is fetching from userSlice 
+
+
+now it's time to setup your store.js
+
+1)first import "configureStore" from "@reduxjs/toolkit"  so this is not a default export 
+2)now import userReducer from "userSlice" js file 
+3)and underneath of it 	create a constent and it's name will be "store" and assign configureStore function which you are importing at the top and inside the function argument will be object 
+4)and the object have 1 property and key of the property is "reducers" and value is object and inside the object we have another property and key will be "user" and value will be "userReducer"
+5) and underneath of this constent export the "store" constent in default manner
+
+
+now go to main.jsx to add the "store" files
+
+1) now first import "provider" from "react-redux" and this not default export 
+2) now import store from store file
+3) wrape you whole application inside the "Provider" tag and this is not self closing tag and it have an attribute store and assign store to it as a javascript variable in jsx syntax
+
+
+now go to the login.jsx where are calling the api 
+
+1) import "useDispatch" from "react-redux"  and this is not the default export 
+2) import and import setUser from userSlice file and this is also not a default export
+3) now create constent and assigned function "useDispatch" just like you create constent for "navigate"
+4) when you are navigate the user to signup when everything goes well just before you need to write 1 line of code use the constent which is now a function and argument will be setUser function and argument will be "data" it will help to get data from object which is coming from api which is fetching from "response" response is the variable which have the object which is coming through api 
+
+now to the Dashboard page where you actually want to show data
+
+1)import useSelector from "react-redux" and this is not default export 
+2)create a constent it's name will be "userInfo" and initailze it with useSelector function which you are importing
+3)and the function have argument and this is arrow function and this will be implicit return arrow function and parameter will be "state" and beside arrow write "userInfo" which is fetching from "user" and user is fetching from "state"
+4)Now go to there where you want to display the name add jsx syntax to write javascript and inside the syntax add ternary operator if "userInfo" constent  exsist then fetch "name" from "userInfo" otherwise display loading...
+
+
+
+if you are getting problem then fix it by yourself i believe in you
+
+
+now let's understand what the thing is required to create slice.js 
+
+
+
+1)first of all we will import the createSlice from reduxToolkit it like the reduxtoolkit toolbox where createslice is a tool which is required in our program
+
+2) create constent and assign createConstent function this function will take aurgument object object must have three property first property key will be "name" and value could be anything 2nd property key will be "initailState" value will be object and inside that object you will write the state name as a key of property and value could be anything but mostly initaily we use "null" and underneath of initailstate we write Reducers property and key will be reducers and value will be object and inside the object property will be setstate make you will give the name of the state beside the set remember in 1 property of object was name you will use that name  to set state for example if you name:"hello" which mean your state name is hello so you will use sethello in he reducer key object i know it's little bit confusing just stick with it and inside it initialize userinfo state with the payload(instruction to reducer) of action(parent)  
+
+3)then useDispatch to  send data
+4)then useSelector hood to get data
+
+
+
+
+but but but the problem is we can see the name of the user but when we refresh  
+
+
+3)now move to store.js and just like slice instead of createSlice you need to use configureStore and inside the object you will use 
+
+
+
+
+
+1)OTP stands for one-Time-Password (which verify you this is really you at entrance of the website or app)
+2)CSRF token stands for (Cross-Site Request Forgery token) which verify you this is really you inside the website or app
+
+
+
+
+
+email
+mivad69209@abevw.com
