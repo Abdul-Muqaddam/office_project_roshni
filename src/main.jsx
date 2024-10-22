@@ -16,6 +16,7 @@ import UnAssignedQuery from './components/unassignedquries.jsx'
 import Completedquries from './components/completed_quries.jsx'
 import Inprogress from './components/inprogress.jsx'
 import Meeting from './components/meeting.jsx'
+import Chat_converse from './components/chat_converse.jsx'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
   {
     path:"/meeting",
     element:<Meeting/>
+  },
+  {
+    path:"/chat_converse",
+    element:<Chat_converse/>
   }
 ])
 

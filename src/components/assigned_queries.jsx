@@ -47,7 +47,10 @@ const Assigned_queries = () => {
     useEffect(() => {
         setFilterQueries(queries)
     }, [queries])
-
+    
+    const HandleChatClick= async()=>{
+        navigate("/chat_converse")
+    }
     // const columns=[
     //     {
     //         name:"Category",
@@ -118,7 +121,7 @@ const Assigned_queries = () => {
                     action.push(
                         <div key={`action-${i}`} className="flex w-[23vw] justify-between">
                             {commanButton}
-                            <button title="Chat" className="flex items-center justify-center rounded-[3px] text-[white] w-[4.375rem] h-[2.125rem] bg-[#00A65A]">
+                            <button title="Chat" className="flex items-center justify-center rounded-[3px] text-[white] w-[4.375rem] h-[2.125rem] bg-[#00A65A]" onClick={HandleChatClick}>
                                 <img src="/src/assets/chat.svg" alt="Chat" className="w-[0.875rem] h-[1.063rem]" /> Chat
                             </button>
                             <button title="Start Video Call" className="bg-[#00A65A] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]" onClick={()=>HandleMeetingClick(state.roomName,state.query_id,state.professional_id)}>
