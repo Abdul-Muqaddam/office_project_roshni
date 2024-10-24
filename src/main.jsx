@@ -17,6 +17,10 @@ import Completedquries from './components/completed_quries.jsx'
 import Inprogress from './components/inprogress.jsx'
 import Meeting from './components/meeting.jsx'
 import Chat_converse from './components/chat_converse.jsx'
+import Subscription from './components/subscription.jsx'
+import Subscription_list from './components/subscription_list.jsx'
+import Pending_reviews from './components/pending_reviews.jsx'
+import Edit_client from './components/edit_client.jsx'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -77,6 +81,22 @@ const router = createBrowserRouter([
   {
     path:"/chat_converse",
     element:<Chat_converse/>
+  },
+  {
+    path:"/subscription",
+    element:<Subscription/>
+  },
+  {
+    path:"/subscription_list",
+    element:<Subscription_list/>
+  },
+  {
+    path:"/pending_reviews",
+    element:<Pending_reviews/>
+  },
+  {
+    path:"/edit_client",
+    element:<Edit_client/>
   }
 ])
 

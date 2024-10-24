@@ -1,21 +1,19 @@
 import React, { useEffect, useState, } from "react";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
-import DataTable from "react-data-table-component";
 import axios from "axios";
-const Chat_customer = () => {
+const edit_client = () => {
     const [data, setData] = useState([])
-    const [filterQueries, setFilterQueries] = useState([])
     useEffect(() => {
         try {
             const fetchapi = async () => {
-                const response = await axios.get(`https://chat.roshni.online/api/getclients`, {
+                const response = await axios.get(`https://chat.roshni.online/api/clients/${Cookies.get("clientid")}`, {
                     headers: {
                         "Authorization": `Bearer ${Cookies.get("token")}`
                     }
                 })
-                console.log(response.data.data)
-                setData(response.data.data)
+                console.log(response.data)
+                setData(response.data)
             }
             fetchapi()
 
@@ -24,103 +22,58 @@ const Chat_customer = () => {
 
         }
     }, [])
-    const columns = [
-        {
-            name: "#",
-            selector: state => state.DT_RowIndex,
-            sortable: true,
-            searchable: true,
-        },
-        {
-            name: "Name",
-            selector: state => state.full_name,
-            sortable: true,
-            searchable: true,
-            cell:row=>(
-                <div className="max-w-16">
-                    {row.full_name}
-                </div>
-            )
-        },
-        {
-            name: "Email",
-            selector: state => state.email,
-            sortable: true,
-            searchable: true,
-            cell: row => (
-                <div className="max-w-16">
-                    {row.email}
-                </div>
-            ),
-        },
-        {
-            name: "Phone",
-            selector: state => state.phone,
-            sortable: true,
-            searchable: true,
-            cell: row=>(
-                <div className="w-max-16">
-                    {row.phone}
-                </div>
-            )
-        },
-        {
-            name: "Address",
-            selector: state => state.address,
-            sortable: true,
-            searchable: true,
-        },
-        {
-            name: "Balance",
-            selector: State => State.balance,
-            sortable: true,
-            searchable: true,
-        },
-        {
-            name: "Action",
-            selector: State => {
-                return (
-                    <>
-                        <div className="flex justify-between w-[30vw]">
-                            <Link to={"/edit_client"} className="bg-[#00C0EF] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[2.851rem]">
-                                <img src="/src/assets/edit.svg" alt="" />
-                                Edit
-                            </Link>
-                            <Link to={"/create_query"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[6.541rem]">
-                                <img src="/src/assets/edit.svg" alt="" />
-                                Create Query
-                            </Link>
-                            <Link to={"/query"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[5.541rem]">
-                                <img src="/src/assets/menu.svg" alt="" />
-                                Query list
-                            </Link>
-                            <Link to={"/subscription"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[7.541rem]">
-                                <img src="/src/assets/globe.svg" alt="" />
-                                Subscription
-                            </Link>
-                        </div>
-                        <div className="flex justify-between w-[19.5vw] mt-[1px]">
-                            <Link to={"/subscription_list"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[7.541rem]">
-                                <img src="/src/assets/menu.svg" alt="" />
-                                Subscription List
-                            </Link>
-                            <Link to={"/pending_reviews"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[7.541rem]">
-                                <img src="/src/assets/menu.svg" alt="" />
-                                Pending Reviews
-                            </Link>
-                        </div>
-                    {console.log(State.action)}</>
-                )
-            },
-            grow: 6
+    const handleFirstName=(e)=>{
+        setData({
+            ...data,
+            firstname:e.target.value
+        })
+    }
+    const handleLastName=(e)=>{
+        setData({
+            ...data,
+            lastname:e.target.value
+        })
+    }
+    const handleEmail=(e)=>{
+        setData({
+            ...data,
+            email:e.target.value
+        })
+    }
+    const handlePhone=(e)=>{
+        setData({
+            ...data,
+            phone:e.target.value
+        })
+    }
+    const handleAddress=(e)=>{
+        setData({
+            ...data,
+            address:e.target.value
+        })
+    }
+    const handleUpdate=()=>{
+        console.log(Cookies.get())
+        try {
+            const fetchapi = async () => {
+                const response = await axios.put(`https://chat.roshni.online/api/clients/${Cookies.get("clientid")}`,data, {
+                    headers: {
+                        "Authorization": `Bearer ${Cookies.get("token")}`
+                    }
+                })
+                console.log(response.data)
+                Cookies.set("name",response.data.firstname,{expires:7})
+                if(response.status=200){
+                    alert("Updated Successfully")
+                    window.location.reload()
+                }
+            }
+            fetchapi()
+
         }
-    ]
-    useEffect(() => {
-        setFilterQueries(data)
-    }, [data])
-    const handleFilter = (e) => {
-        const filterQuery = data.filter((row) => row.full_name.toLowerCase().includes(e.target.value.toLowerCase()))
-        setFilterQueries(filterQuery)
+        catch (error) {
+
+        }
     }
     return (
         <>
@@ -214,11 +167,67 @@ const Chat_customer = () => {
                     </div>
                     <div className="flex flex-col justify-between h-[81.846vh]">
                         <div className="bg-[white] h-[43.761vh] w-[82.031vw] border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20">
-                            <div className="w-[79.688vw] h-[39.918vh] border-t-[3px] border-[#3C8DBC]  rounded-[3px]">
-                                <div className="flex justify-end mt-2">
-                                    Search:&nbsp; <input type="text" className="focus:outline-none border-gray-500 border-[0.5px] px-2 py-1 text-[0.8rem]" onChange={handleFilter} />
+                            <div className="w-[79.688vw] h-[42.918vh] border-t-[3px] border-[#3C8DBC]  rounded-[3px]">
+                                <div className="">
+                                    <div className="w-[80vw] flex items-center flex-col justify-around h-[38vh]">
+                                        <div className="w-[78vw] text-[1.1rem] text-[#555555]">
+                                            Update Client
+                                        </div>
+
+                                        <div className="flex w-[78vw] justify-between">
+                                            <div className="flex flex-col justify-between h-[10vh]">
+                                                <div className="text-[0.8rem] font-bold">
+                                                    First Name
+                                                </div>
+                                                <div className="flex ">
+                                                    <div className="border-[0.5px] h-[2.083rem] w-[2.3rem] border-[#D2D6DE] border-r-transparent flex items-center justify-center"><img src="/src/assets/icon.svg" alt="" /></div>
+                                                    <input type="text " className="border-[0.5px] border-[#D2D6DE] focus:outline-none text-[0.8rem] px-3 text-[#555555]" value={data.firstname} onChange={handleFirstName}/>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col justify-between h-[10vh]">
+                                                <div className="text-[0.8rem] font-bold">
+                                                    Last Name
+                                                </div>
+                                                <div className="flex ">
+                                                    <div className="border-[0.5px] h-[2.083rem] w-[2.3rem] border-[#D2D6DE] border-r-transparent flex items-center justify-center"><img src="/src/assets/icon.svg" alt="" /></div>
+                                                    <input type="text " className="border-[0.5px] border-[#D2D6DE] focus:outline-none text-[0.8rem] px-3 text-[#555555]" value={data.lastname} onChange={handleLastName}/>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col justify-between h-[10vh]">
+                                                <div className="text-[0.8rem] font-bold">
+                                                    Email
+                                                </div>
+                                                <div className="flex ">
+                                                    <div className="border-[0.5px] h-[2.083rem] w-[2.3rem] border-[#D2D6DE] border-r-transparent flex items-center justify-center"><img src="/src/assets/icon.svg" alt="" /></div>
+                                                    <input type="email" className="border-[0.5px] border-[#D2D6DE] focus:outline-none text-[0.8rem] px-3 text-[#555555]" value={data.email} onChange={handleEmail}/>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col justify-between h-[10vh]">
+                                                <div className="text-[0.8rem] font-bold">
+                                                    Phone
+                                                </div>
+                                                <div className="flex ">
+                                                    <div className="border-[0.5px] h-[2.083rem] w-[2.3rem] border-[#D2D6DE] border-r-transparent flex items-center justify-center"><img src="/src/assets/icon.svg" alt="" /></div>
+                                                    <input type="tel" className="border-[0.5px] border-[#D2D6DE] focus:outline-none text-[0.8rem] px-3 text-[#555555]" value={data.phone} onChange={handlePhone}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="flex flex-col justify-between h-[13vh]">
+                                                <div className="font-bold text-[0.8rem]">
+                                                    Address
+                                                </div>
+                                                <div className="flex ">
+                                                    <div className="border-[0.5px] h-[3.333rem] w-[2.3rem] border-[#D2D6DE] border-r-transparent flex items-center justify-center "><img src="/src/assets/icon.svg" alt="" /></div>
+                                                    <textarea type="tel" className="border-[0.5px] border-[#D2D6DE] focus:outline-none text-[0.8rem] px-3 py-2 text-[#555555] w-[75vw] h-[9vh]" value={data.address} onChange={handleAddress}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="w-[78vw] flex justify-end">
+                                        <button className="bg-[#367FA9] text-[white] h-[2.083rem] w-[5.316rem] rounded-sm" onClick={handleUpdate}>Update</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <DataTable columns={columns} data={filterQueries} pagination paginationPerPage={3}></DataTable>
                             </div>
                         </div>
                         <footer className="bg-[white] w-[82.031vw] h-[8.662vh] shadow-upperShadow flex items-center justify-center">
@@ -242,4 +251,4 @@ const Chat_customer = () => {
         </>
     )
 }
-export default Chat_customer;
+export default edit_client;

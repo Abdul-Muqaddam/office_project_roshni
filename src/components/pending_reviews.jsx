@@ -3,19 +3,20 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-const Chat_customer = () => {
+const Pending_reviews = () => {
     const [data, setData] = useState([])
     const [filterQueries, setFilterQueries] = useState([])
     useEffect(() => {
         try {
             const fetchapi = async () => {
-                const response = await axios.get(`https://chat.roshni.online/api/getclients`, {
+                console.log(`${Cookies.get("clientid")}`)
+                const response = await axios.get(`https://chat.roshni.online/api/pending/reviews/${Cookies.get("clientid")}`, {
                     headers: {
                         "Authorization": `Bearer ${Cookies.get("token")}`
                     }
                 })
-                console.log(response.data.data)
-                setData(response.data.data)
+                console.log(response.data)
+                setData(response.data)
             }
             fetchapi()
 
@@ -27,92 +28,38 @@ const Chat_customer = () => {
     const columns = [
         {
             name: "#",
-            selector: state => state.DT_RowIndex,
-            sortable: true,
-            searchable: true,
-        },
-        {
-            name: "Name",
-            selector: state => state.full_name,
-            sortable: true,
-            searchable: true,
-            cell:row=>(
-                <div className="max-w-16">
-                    {row.full_name}
-                </div>
+            selector: (row,state) => {
+                return(<>
+                {++state}
+                </>
             )
         },
-        {
-            name: "Email",
-            selector: state => state.email,
-            sortable: true,
-            searchable: true,
-            cell: row => (
-                <div className="max-w-16">
-                    {row.email}
-                </div>
-            ),
-        },
-        {
-            name: "Phone",
-            selector: state => state.phone,
-            sortable: true,
-            searchable: true,
-            cell: row=>(
-                <div className="w-max-16">
-                    {row.phone}
-                </div>
-            )
-        },
-        {
-            name: "Address",
-            selector: state => state.address,
             sortable: true,
             searchable: true,
         },
         {
-            name: "Balance",
-            selector: State => State.balance,
+            name: "Professional Name",
+            selector: state => state.professionals,
             sortable: true,
             searchable: true,
+            grow:2
+
         },
+        
+        
+        
+        
         {
             name: "Action",
             selector: State => {
                 return (
                     <>
-                        <div className="flex justify-between w-[30vw]">
-                            <Link to={"/edit_client"} className="bg-[#00C0EF] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[2.851rem]">
-                                <img src="/src/assets/edit.svg" alt="" />
-                                Edit
-                            </Link>
-                            <Link to={"/create_query"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[6.541rem]">
-                                <img src="/src/assets/edit.svg" alt="" />
-                                Create Query
-                            </Link>
-                            <Link to={"/query"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[5.541rem]">
-                                <img src="/src/assets/menu.svg" alt="" />
-                                Query list
-                            </Link>
-                            <Link to={"/subscription"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[7.541rem]">
-                                <img src="/src/assets/globe.svg" alt="" />
-                                Subscription
-                            </Link>
-                        </div>
-                        <div className="flex justify-between w-[19.5vw] mt-[1px]">
-                            <Link to={"/subscription_list"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[7.541rem]">
-                                <img src="/src/assets/menu.svg" alt="" />
-                                Subscription List
-                            </Link>
-                            <Link to={"/pending_reviews"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[7.541rem]">
-                                <img src="/src/assets/menu.svg" alt="" />
-                                Pending Reviews
-                            </Link>
+                        <div className="flex items-center justify-center bg-[#00ACD6] w-[2.458rem] h-[2.083rem]">
+                            <img src="/src/assets/feedback.svg" alt="" className="h-[1.2rem]"/>
                         </div>
                     {console.log(State.action)}</>
                 )
             },
-            grow: 6
         }
     ]
     useEffect(() => {
@@ -242,4 +189,4 @@ const Chat_customer = () => {
         </>
     )
 }
-export default Chat_customer;
+export default Pending_reviews;

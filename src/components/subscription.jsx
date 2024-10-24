@@ -1,126 +1,58 @@
 import React, { useEffect, useState, } from "react";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
-import DataTable from "react-data-table-component";
-import axios from "axios";
-const Chat_customer = () => {
-    const [data, setData] = useState([])
-    const [filterQueries, setFilterQueries] = useState([])
-    useEffect(() => {
-        try {
-            const fetchapi = async () => {
-                const response = await axios.get(`https://chat.roshni.online/api/getclients`, {
-                    headers: {
-                        "Authorization": `Bearer ${Cookies.get("token")}`
-                    }
-                })
-                console.log(response.data.data)
-                setData(response.data.data)
+const Subscription = () => {
+    const [packageRate,setPackageRate]=useState([])
+    const [subscriptionDetail,setSubscriptionDetail]=useState({
+        pkg:"",
+        units:"",
+        rate:"",
+    })
+    useEffect(()=>{
+        const fetchapi=async ()=>{
+            const response=await fetch(`https://chat.roshni.online/api/clients/${Cookies.get("clientid")}/subscription`,{
+                method:"GET",
+                headers:{
+                    "Authorization":`Bearer ${Cookies.get("token")}`
+                }
+            })
+            if(response.ok){
+                const data = await response.json();
+                console.log(data)
+                console.log(data[1].length);
+                setPackageRate(data[1])
+
             }
-            fetchapi()
-
         }
-        catch (error) {
-
+        fetchapi();
+    },[])
+    const HandleChange=(event)=>{
+        const value=event.target.value;
+        if(value==2){
+            packageRate.map((event)=>{
+                if(event.duration=="daily"){
+                    setSubscriptionDetail({
+                        pkg:event.duration,
+                        units:event.units,
+                        rate:event.rate,
+                    })
+                }
+            })
         }
-    }, [])
-    const columns = [
-        {
-            name: "#",
-            selector: state => state.DT_RowIndex,
-            sortable: true,
-            searchable: true,
-        },
-        {
-            name: "Name",
-            selector: state => state.full_name,
-            sortable: true,
-            searchable: true,
-            cell:row=>(
-                <div className="max-w-16">
-                    {row.full_name}
-                </div>
-            )
-        },
-        {
-            name: "Email",
-            selector: state => state.email,
-            sortable: true,
-            searchable: true,
-            cell: row => (
-                <div className="max-w-16">
-                    {row.email}
-                </div>
-            ),
-        },
-        {
-            name: "Phone",
-            selector: state => state.phone,
-            sortable: true,
-            searchable: true,
-            cell: row=>(
-                <div className="w-max-16">
-                    {row.phone}
-                </div>
-            )
-        },
-        {
-            name: "Address",
-            selector: state => state.address,
-            sortable: true,
-            searchable: true,
-        },
-        {
-            name: "Balance",
-            selector: State => State.balance,
-            sortable: true,
-            searchable: true,
-        },
-        {
-            name: "Action",
-            selector: State => {
-                return (
-                    <>
-                        <div className="flex justify-between w-[30vw]">
-                            <Link to={"/edit_client"} className="bg-[#00C0EF] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[2.851rem]">
-                                <img src="/src/assets/edit.svg" alt="" />
-                                Edit
-                            </Link>
-                            <Link to={"/create_query"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[6.541rem]">
-                                <img src="/src/assets/edit.svg" alt="" />
-                                Create Query
-                            </Link>
-                            <Link to={"/query"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[5.541rem]">
-                                <img src="/src/assets/menu.svg" alt="" />
-                                Query list
-                            </Link>
-                            <Link to={"/subscription"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[7.541rem]">
-                                <img src="/src/assets/globe.svg" alt="" />
-                                Subscription
-                            </Link>
-                        </div>
-                        <div className="flex justify-between w-[19.5vw] mt-[1px]">
-                            <Link to={"/subscription_list"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[7.541rem]">
-                                <img src="/src/assets/menu.svg" alt="" />
-                                Subscription List
-                            </Link>
-                            <Link to={"/pending_reviews"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[7.541rem]">
-                                <img src="/src/assets/menu.svg" alt="" />
-                                Pending Reviews
-                            </Link>
-                        </div>
-                    {console.log(State.action)}</>
-                )
-            },
-            grow: 6
+        else if(value==3){
+            packageRate.map((event)=>{
+                if(event.duration=="weekly"){
+                    setSubscriptionDetail({
+                        pkg:event.duration,
+                        units:event.units,
+                        rate:event.rate,
+                    })
+                }
+            })
         }
-    ]
-    useEffect(() => {
-        setFilterQueries(data)
-    }, [data])
-    const handleFilter = (e) => {
-        const filterQuery = data.filter((row) => row.full_name.toLowerCase().includes(e.target.value.toLowerCase()))
-        setFilterQueries(filterQuery)
+        else if(value==4){
+            console.log("Monthly")
+        }
     }
     return (
         <>
@@ -213,12 +145,66 @@ const Chat_customer = () => {
                         </div>
                     </div>
                     <div className="flex flex-col justify-between h-[81.846vh]">
-                        <div className="bg-[white] h-[43.761vh] w-[82.031vw] border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20">
+                        <div className="bg-[white] h-[75.761vh] w-[82.031vw] border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20">
                             <div className="w-[79.688vw] h-[39.918vh] border-t-[3px] border-[#3C8DBC]  rounded-[3px]">
-                                <div className="flex justify-end mt-2">
-                                    Search:&nbsp; <input type="text" className="focus:outline-none border-gray-500 border-[0.5px] px-2 py-1 text-[0.8rem]" onChange={handleFilter} />
+
+                                <div className="text-[1.1rem] text-black/70">Package</div>
+                                <div className="w-[78.688vw] h-[65vh] flex flex-col justify-between items-center">
+                                    <div>
+                                        <div className="h-[9vh] flex flex-col justify-between">
+                                            <div className="text-[0.8rem] font-bold">
+                                                Duration
+                                            </div>
+                                            <select name="" id="" onChange={HandleChange} className="w-[78vw] px-3 py-1 text-[0.8rem] focus:outline-none text-[black]/70 border-[0.5px] border-[black]/30 focus:border-[0.5px] focus:border-blue-500">
+                                                <option value="1">--Select Duration--</option>
+                                                <option value="2">Daily</option>
+                                                <option value="3">Weekly</option>
+                                                <option value="4">Monthly</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="h-[10vh] flex flex-col justify-between">
+
+                                        <div className="text-[0.8rem] font-bold">
+                                            Package
+                                        </div>
+                                        <select name="" id="" className="w-[78vw] text-[0.8rem] px-3 py-1 focus:outline-none text-[black]/70 border-[0.5px] border-[black]/30 focus:border-[0.5px] focus:border-blue-500">
+                                        <option value="1" >{subscriptionDetail && subscriptionDetail.pkg?subscriptionDetail.pkg:"--Select Package--"}</option>
+                                        </select>
+                                    </div>
+                                    <div className="h-[10vh] flex flex-col justify-between">
+
+                                        <div className="text-[0.8rem] font-bold">
+                                            Units
+                                        </div>
+                                        <input name="" id="" className="w-[78vw] px-3 py-1 focus:outline-none text-[black]/70 border-[0.5px] border-[black]/30 cursor-text bg-[#EEEEEE] text-[0.8rem]" value={subscriptionDetail.units} disabled>
+
+                                        </input>
+                                    </div>
+                                    <div className="h-[10vh] flex flex-col justify-between">
+
+                                        <div className="text-[0.8rem] font-bold">
+                                            Rate
+                                        </div>
+                                        <input name="" id="" className="w-[78vw] px-3 py-1 focus:outline-none text-[black]/70 border-[0.5px] border-[black]/30 cursor-text bg-[#EEEEEE] text-[0.8rem]" value={subscriptionDetail.rate} disabled>
+
+                                        </input>
+                                    </div>
+                                    <div className="h-[10vh] flex flex-col justify-between">
+
+                                        <div className="text-[0.8rem] font-bold">
+                                            Recurring
+                                        </div>
+                                        <select name="" id="" className="w-[78vw] px-3 py-1 focus:outline-none text-[black]/70 border-[0.5px] border-[black]/30 focus:border-[0.5px] focus:border-blue-500 text-[0.8rem]">
+                                            <option value="1">No</option>
+                                            <option value="2">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div className="w-[99%]">
+                                        <button className="text-white bg-[#367FA9] text-[0.8rem] w-[5.213rem] h-[2.083rem] rounded">Subscribe</button>
+                                    </div>
                                 </div>
-                                <DataTable columns={columns} data={filterQueries} pagination paginationPerPage={3}></DataTable>
+
                             </div>
                         </div>
                         <footer className="bg-[white] w-[82.031vw] h-[8.662vh] shadow-upperShadow flex items-center justify-center">
@@ -242,4 +228,4 @@ const Chat_customer = () => {
         </>
     )
 }
-export default Chat_customer;
+export default Subscription;
