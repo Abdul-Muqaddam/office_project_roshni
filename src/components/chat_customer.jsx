@@ -3,9 +3,54 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import DataTable from "react-data-table-component";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Chat_customer = () => {
+    const navigate=useNavigate();
     const [data, setData] = useState([])
     const [filterQueries, setFilterQueries] = useState([])
+    const [error,setError]=useState(false)
+    const [profilePopupVisible,setProfilePopupVisible]=useState(false);  
+    // "isProfilePopupVisible" is used to toggle the display of the profile popup on the right side.
+    // When true, the popup is shown; when false, the popup is hidden. This state is controlled by
+    // clicking on the profile icon or username to display/hide user options like "Profile" and "Sign out."
+
+
+    const handleprofilePopupVisible=()=>{
+        if(profilePopupVisible){
+            setProfilePopupVisible(false) 
+        }   
+        else{
+            setProfilePopupVisible(true) 
+        }    // this is help to toggle the isProfilePopupVisible
+    }
+    const getTheValue=()=>{
+        if(profilePopupVisible){
+            setProfilePopupVisible(false)    // close the isProfilePopupVisible whereever userClick
+        }
+    }
+    const handleProfile=()=>{
+        navigate("/userProfile")
+    }
+    const handleSignOut= async ()=>{
+        
+        try {
+            const response=await axios.post("https://chat.roshni.online/api/logout",{},{
+                headers:{
+                    "Authorization":`Bearer ${Cookies.get("token")}`
+                }
+                
+            })
+            if(response.status==200){
+                alert(response.data.message)
+                    navigate("/");
+
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        
+   
+}
     useEffect(() => {
         try {
             const fetchapi = async () => {
@@ -21,7 +66,8 @@ const Chat_customer = () => {
 
         }
         catch (error) {
-
+            setError(true)
+            console.log(error)
         }
     }, [])
     const columns = [
@@ -124,7 +170,7 @@ const Chat_customer = () => {
     }
     return (
         <>
-            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]">
+            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]" onClick={getTheValue}>
                 <aside className="w-[17.969vw] h-[100vh]">
                     <div className="w-[17.969vw] h-[8.547vh] bg-[#367FA9] flex items-center justify-center text-[white]" >
                         <div className="w-[10.262vw] flex justify-between items-center">
@@ -186,10 +232,25 @@ const Chat_customer = () => {
                         <div>
                             <img src="" alt="" />
                         </div>
-                        <div className="flex items-center h-[8.547vh] w-[81.031vw] justify-end">
+                        <div className="flex items-center h-[8.547vh] w-[82.031vw] justify-end" >
+                            <div className="cursor-pointer flex hover:bg-[#2f7096] h-[100%] items-center px-2" onClick={handleprofilePopupVisible}>
                             <img src="src/assets/user_profile.svg" alt="" className="h-[1.563rem]" />
                             <div className="text-white ml-[0.9vw]">{Cookies.get("name")}</div>
+                            </div>
                         </div>
+                        <div className={`w-[21.875vw] h-[37.916vh] top-14 right-1 ${profilePopupVisible?"absolute":"hidden"} z-10`} >
+                                <div className="bg-[#3C8DBC] w-[100%] h-[78%] flex flex-col items-center ">
+                                    <img src="./src/assets/user_profile.jpg" alt="" className="rounded-[5rem] mt-[1.8vh] h-[15.385vh] border-4 border-[#63A4C9]" />
+                                    <div className="text-white">{Cookies.get("name")}</div>
+                                </div>
+                                <div className="bg-[white] h-[22%] flex items-center justify-center ">
+                                    <div className="w-[90%] flex justify-between items-center">
+                                        <button className="border-[1px] border-[#ADADAD]/60 bg-[#F4F4F4] text-[#666666] text-[0.85rem] px-2 py-[4px] hover:bg-[#E7E7E7]" onClick={handleProfile}>Profile</button>
+                                        <button className="border-[1px] border-[#ADADAD]/60 bg-[#F4F4F4] text-[#666666] text-[0.85rem] px-2 py-[4px] hover:bg-[#E7E7E7]" onClick={handleSignOut}>Sign out</button>
+                                    </div>
+                                </div>
+
+                            </div>
                     </nav>
                     <div className="w-[82.031vw] h-[9.573vh] flex items-center justify-center">
                         <div className="h-[9.573vh] w-[80.031vw] flex items-center justify-between">
@@ -218,7 +279,7 @@ const Chat_customer = () => {
                                 <div className="flex justify-end mt-2">
                                     Search:&nbsp; <input type="text" className="focus:outline-none border-gray-500 border-[0.5px] px-2 py-1 text-[0.8rem]" onChange={handleFilter} />
                                 </div>
-                                <DataTable columns={columns} data={filterQueries} pagination paginationPerPage={3}></DataTable>
+                                <DataTable columns={columns} data={filterQueries} pagination paginationPerPage={3} noDataComponent={error?"There are no data to display":"Loading..."}></DataTable>
                             </div>
                         </div>
                         <footer className="bg-[white] w-[82.031vw] h-[8.662vh] shadow-upperShadow flex items-center justify-center">

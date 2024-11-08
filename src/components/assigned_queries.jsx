@@ -11,6 +11,50 @@ const Assigned_queries = () => {
     const [queries, setQueries] = useState([])
     const [filterQueries, setFilterQueries] = useState([])
     const location = useLocation()
+    const [error,setError]=useState(false)
+
+
+    const [profilePopupVisible,setProfilePopupVisible]=useState(false);  
+    // "isProfilePopupVisible" is used to toggle the display of the profile popup on the right side.
+    // When true, the popup is shown; when false, the popup is hidden. This state is controlled by
+    // clicking on the profile icon or username to display/hide user options like "Profile" and "Sign out."
+
+    const handleSignOut= async ()=>{
+        
+        try {
+            const response=await axios.post("https://chat.roshni.online/api/logout",{},{
+                headers:{
+                    "Authorization":`Bearer ${Cookies.get("token")}`
+                }
+                
+            })
+            if(response.status==200){
+                alert(response.data.message)
+                    navigate("/");
+
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        
+   
+}
+    const handleprofilePopupVisible=()=>{
+        if(profilePopupVisible){
+            setProfilePopupVisible(false) 
+        }   
+        else{
+            setProfilePopupVisible(true) 
+        }    // this is help to toggle the isProfilePopupVisible
+    }
+    const getTheValue=()=>{
+        if(profilePopupVisible){
+            setProfilePopupVisible(false)    // close the isProfilePopupVisible whereever userClick
+        }
+    }
+    const handleProfile=()=>{
+        navigate("/userProfile")
+    }
     const handleClick = (queryid) => {
         navigate("/editquery",{state:{queryid}})
     }
@@ -30,12 +74,13 @@ const Assigned_queries = () => {
                         "Authorization": `Bearer ${Cookies.get("token")}`
                     }
                 })
-                Cookies.set("roomname",response.data[1].roomName,{expires:7})
+                // Cookies.set("roomname",response.data[1].roomName,{expires:7})
                 console.log(response.data)
                 setQueries(response.data)
                 
             }
             catch (error) {
+                setError(true)
                 console.log(error)
             }
         }
@@ -50,6 +95,33 @@ const Assigned_queries = () => {
     
     const HandleChatClick= async()=>{
         navigate("/chat_converse")
+    }
+    const handleJobGalleryButton=()=>{
+        navigate("/jobGallary")
+    }
+    const handleDeleteButton=async(query)=>{
+        if(confirm("Are you sure you want to delete this query?"))
+        {
+            try {
+                const response=await axios.delete(`https://chat.roshni.online/api/queries/${query}`,{
+                    headers:{
+                        Authorization:`Bearer ${Cookies.get("token")}`
+                    }
+                })  
+                if(response.status==200){
+                    alert("Query has been succesfully deleted")
+                    window.location.reload();
+                }              
+            } catch (error) {
+
+                alert("We cannot delete this query catch")
+                console.error(error)
+            }   
+            
+        }
+        else{
+            
+        }
     }
     // const columns=[
     //     {
@@ -82,7 +154,7 @@ const Assigned_queries = () => {
         },
         {
             name: "Professional",
-            selector: state => state.professionals
+            selector: state => state.professional
         },
         {
             name: "Description",
@@ -95,13 +167,13 @@ const Assigned_queries = () => {
                 const commanButton = (
                     <>
 
-                        <button title="Edit" onClick={()=> handleClick(state.query_id)} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
+                        <button title="Edit" onClick={()=> handleClick(state.query_id)} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px] ">
                             <img src="/src/assets/edit.svg" alt="Edit" className="w-[0.875rem] h-[1.063rem]" />
                         </button>
-                        <button title="Delete" className="bg-[#DD4B39] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
+                        <button onClick={()=>{handleDeleteButton(state.query_id);console.log(state.query_id)}} title="Delete" className="bg-[#DD4B39] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
                             <img src="/src/assets/delete.svg" alt="Delete" className="w-[0.875rem] h-[1.063rem]" />
                         </button>
-                        <button title="Edit" className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
+                        <button onClick={handleJobGalleryButton} title="Edit" className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
                             <img src="/src/assets/img.svg" alt="Image" className="w-[0.875rem] h-[1.063rem]" />
                         </button>
 
@@ -172,7 +244,7 @@ const Assigned_queries = () => {
     return (
         <>
             {/* <button onClick={handlegetquery}>click me!</button> */}
-            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]">
+            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]" onClick={getTheValue}>
                 <aside className="w-[17.969vw] h-[100vh]">
                     <div className="w-[17.969vw] h-[8.547vh] bg-[#367FA9] flex items-center justify-center text-[white]" >
                         <div className="w-[10.262vw] flex justify-between items-center">
@@ -234,10 +306,25 @@ const Assigned_queries = () => {
                         <div>
                             <img src="" alt="" />
                         </div>
-                        <div className="flex items-center h-[8.547vh] w-[81.031vw] justify-end">
+                        <div className="flex items-center h-[8.547vh] w-[82.031vw] justify-end" >
+                            <div className="cursor-pointer flex hover:bg-[#2f7096] h-[100%] items-center px-2" onClick={handleprofilePopupVisible}>
                             <img src="src/assets/user_profile.svg" alt="" className="h-[1.563rem]" />
                             <div className="text-white ml-[0.9vw]">{Cookies.get("name")}</div>
+                            </div>
                         </div>
+                        <div className={`w-[21.875vw] h-[37.916vh] top-14 right-1 ${profilePopupVisible?"absolute":"hidden"} z-10`} >
+                                <div className="bg-[#3C8DBC] w-[100%] h-[78%] flex flex-col items-center ">
+                                    <img src="./src/assets/user_profile.jpg" alt="" className="rounded-[5rem] mt-[1.8vh] h-[15.385vh] border-4 border-[#63A4C9]" />
+                                    <div className="text-white">{Cookies.get("name")}</div>
+                                </div>
+                                <div className="bg-[white] h-[22%] flex items-center justify-center ">
+                                    <div className="w-[90%] flex justify-between items-center">
+                                        <button className="border-[1px] border-[#ADADAD]/60 bg-[#F4F4F4] text-[#666666] text-[0.85rem] px-2 py-[4px] hover:bg-[#E7E7E7]" onClick={handleProfile}>Profile</button>
+                                        <button className="border-[1px] border-[#ADADAD]/60 bg-[#F4F4F4] text-[#666666] text-[0.85rem] px-2 py-[4px] hover:bg-[#E7E7E7]" onClick={handleSignOut}>Sign out</button>
+                                    </div>
+                                </div>
+
+                            </div>
                     </nav>
                     <div className="w-[82.031vw] h-[9.573vh] flex items-center justify-center">
                         <div className="h-[9.573vh] w-[80.031vw] flex items-center justify-between">
@@ -272,7 +359,7 @@ const Assigned_queries = () => {
                                     </div>
                                     <div className="text-black/80 text-[0.9rem]">Search: <input type="text" onChange={handleSearch} className="border-[1px] border-black/30 rounded-[3px] h-[1.875rem] w-[9.688rem] text-[0.8rem] px-2 focus:outline-none " /></div>
                                 </div>
-                                <DataTable data={filterQueries} columns={columns} pagination paginationPerPage={3}>
+                                <DataTable data={filterQueries} columns={columns} pagination paginationPerPage={3} noDataComponent={error?"There are no data to display":"Loading..."}>
 
                                 </DataTable>
 

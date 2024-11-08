@@ -16,11 +16,14 @@ import UnAssignedQuery from './components/unassignedquries.jsx'
 import Completedquries from './components/completed_quries.jsx'
 import Inprogress from './components/inprogress.jsx'
 import Meeting from './components/meeting.jsx'
-import Chat_converse from './components/chat_converse.jsx'
 import Subscription from './components/subscription.jsx'
 import Subscription_list from './components/subscription_list.jsx'
 import Pending_reviews from './components/pending_reviews.jsx'
 import Edit_client from './components/edit_client.jsx'
+import Job_Gallery from './components/Job Gallery.jsx'
+import Feedback from './components/feedback.jsx'
+import UserProfile from './components/userProfile.jsx'
+import ChangePassword from './components/changePassword.jsx'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -79,10 +82,6 @@ const router = createBrowserRouter([
     element:<Meeting/>
   },
   {
-    path:"/chat_converse",
-    element:<Chat_converse/>
-  },
-  {
     path:"/subscription",
     element:<Subscription/>
   },
@@ -97,6 +96,22 @@ const router = createBrowserRouter([
   {
     path:"/edit_client",
     element:<Edit_client/>
+  },
+  {
+    path:"/jobGallary",
+    element:<Job_Gallery/>
+  },
+  {
+    path:"/feedback",
+    element:<Feedback/>
+  },
+  {
+    path:"/userProfile",
+    element:<UserProfile/>
+  },
+  {
+    path:"/changePassword",
+    element:<ChangePassword/>
   }
 ])
 

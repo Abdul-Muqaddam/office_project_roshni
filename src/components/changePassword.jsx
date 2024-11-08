@@ -1,26 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import axios from "axios";
-import DataTable from "react-data-table-component";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
 import Cookies from "js-cookie";
+import DataTable from "react-data-table-component";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Feedback from "./feedback";
-const Query = () => {
-    const navigate = useNavigate();
-    // const userInfo=useSelector((state)=>state.user.userInfo)
-    const location = useLocation()
-    const [queries, setQueries] = useState("")
-    const [filterQueries, setfilterQueries] = useState("")
-    const [error, setError] = useState(false)
+const ChangePassword = () => {
+    const navigate = useNavigate()
+    const [data, setData] = useState([])
+    const [filterQueries, setFilterQueries] = useState([])
+    const [loading, setLoading] = useState(true)
 
     const [profilePopupVisible, setProfilePopupVisible] = useState(false);
     // "isProfilePopupVisible" is used to toggle the display of the profile popup on the right side.
     // When true, the popup is shown; when false, the popup is hidden. This state is controlled by
     // clicking on the profile icon or username to display/hide user options like "Profile" and "Sign out."
 
+
+    const handleSignOut= async ()=>{
+        
+        try {
+            const response=await axios.post("https://chat.roshni.online/api/logout",{},{
+                headers:{
+                    "Authorization":`Bearer ${Cookies.get("token")}`
+                }
+                
+            })
+            if(response.status==200){
+                alert(response.data.message)
+                    navigate("/");
+
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        
+   
+    }
 
     const handleprofilePopupVisible = () => {
         if (profilePopupVisible) {
@@ -39,171 +54,8 @@ const Query = () => {
         navigate("/userProfile")
     }
 
-    const handleSignOut = async () => {
-
-        try {
-            const response = await axios.post("https://chat.roshni.online/api/logout", {}, {
-                headers: {
-                    "Authorization": `Bearer ${Cookies.get("token")}`
-                }
-            })
-            if (response.status == 200) {
-                alert(response.data.message)
-                navigate("/");
-
-            }
-        } catch (error) {
-            console.log(error)
-        }
 
 
-    }
-
-    useEffect(() => {
-        const fetchQuries = async () => {
-
-            try {
-                const response = await axios.get(`https://chat.roshni.online/api/clients/${Cookies.get("clientid")}/queries`, {
-                    headers: {
-                        "Authorization": `Bearer ${Cookies.get("token")}`
-                    }
-                })
-                setQueries(response.data)
-                console.log(response.data)
-            } catch (error) {
-                setError(true)
-                console.log(error)
-            }
-        }
-        fetchQuries();
-    }, [location.pathname])
-
-    useEffect(() => {
-        const fetchapi = () => {
-            setfilterQueries(queries)
-        }
-        fetchapi();
-    }, [queries])
-    const handleChange = (event) => {
-        const newData = queries.filter(row => {
-            return row.category.toLowerCase().includes(event.target.value.toLowerCase())
-        })
-        setfilterQueries(newData)
-    }
-    const handleEditButton = (query) => {
-        navigate("/editquery", { state: { query } })
-    }
-    const handleJobGallaryButton = () => {
-        navigate("/jobGallary")
-    }
-    const handleFeedback=()=>{
-        navigate("/feedback")
-    }
-    const handleDeleteButton = async (query) => {
-        if (confirm("Are you sure you want to delete this query?")) {
-            try {
-                const response = await axios.delete(`https://chat.roshni.online/api/queries/${query}`, {
-                    headers: {
-                        Authorization: `Bearer ${Cookies.get("token")}`
-                    }
-                })
-                alert("Query has Been deleted")
-            } catch (error) {
-                alert("We cannot delete this query")
-                console.error(error)
-            }
-
-        }
-        else {
-
-        }
-    }
-    const columns = [
-        {
-            name: "Category",
-            selector: state => state.category,
-            sortable: true
-        },
-        {
-            name: "Status",
-            selector: state => state.status,
-            sortable: true
-        },
-        {
-            name: "Professional",
-            selector: state => state.professional,
-            sortable: true
-        },
-        {
-            name: "Description",
-            selector: state => state.description,
-            sortable: true
-        },
-        {
-            name: "Action",
-            selector: state => {
-                if(state.status=="inprogress"){
-                    return (
-                        <div className="flex w-[20vw] justify-between">
-                        <button onClick={() => handleEditButton(state.query_id)} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/edit.svg" alt="" title="Edit" className=" w-[0.875rem] h-[1.063rem]" />
-                        </button>
-                        <button onClick={handleJobGallaryButton} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/img.svg" alt="" title="Edit" className=" w-[0.875rem] h-[1.063rem]" />
-                        </button>
-                        <button title="Chat" className="flex items-center justify-center rounded-[3px] text-[white] w-[4.375rem] h-[2.125rem] bg-[#00A65A]">
-                            <img src="/src/assets/chat.svg" alt="Chat" className="w-[0.875rem] h-[1.063rem]" /> Chat
-                        </button>
-
-                        <button title="Start Video Call" className="bg-[#00A65A] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/call.svg" alt="Call" className="w-[0.875rem] h-[1.063rem]" />
-                        </button>
-                        <button title="FeedBack" onClick={handleFeedback} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/feedback.svg" alt="Feedback" className="w-[0.875rem] h-[1.063rem]" />
-                        </button>
-                    </div>
-                )
-            }
-            if(state.status=="assigned"){
-                return(
-                    <div className="flex w-[23vw] justify-between">
-                        <button onClick={() => handleEditButton(state.query_id)} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/edit.svg" alt="" title="Edit" className=" w-[0.875rem] h-[1.063rem]" />
-                        </button>
-                        <button onClick={handleJobGallaryButton} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/img.svg" alt="" title="Edit" className=" w-[0.875rem] h-[1.063rem]" />
-                        </button>
-                        <button title="Chat" className="flex items-center justify-center rounded-[3px] text-[white] w-[4.375rem] h-[2.125rem] bg-[#00A65A]">
-                            <img src="/src/assets/chat.svg" alt="Chat" className="w-[0.875rem] h-[1.063rem]" /> Chat
-                        </button>
-                        <button onClick={() => handleDeleteButton(state.query_id)} className="bg-[#DD4B39] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/delete.svg" alt="" title="Edit" className=" w-[0.875rem] h-[1.063rem]" />
-                        </button>
-                        <button title="Start Video Call" className="bg-[#00A65A] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/call.svg" alt="Call" className="w-[0.875rem] h-[1.063rem]" />
-                        </button>
-                        <button title="FeedBack" onClick={handleFeedback} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/feedback.svg" alt="Feedback" className="w-[0.875rem] h-[1.063rem]" />
-                        </button>
-                    </div>
-                )
-            }
-            if(state.status=="completed"){
-                return(
-                    <div className="flex w-[6.7vw] justify-between">
-                        <button onClick={handleJobGallaryButton} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/img.svg" alt="" title="Edit" className=" w-[0.875rem] h-[1.063rem]" />
-                        </button>                        
-                        <button title="FeedBack" onClick={handleFeedback} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
-                            <img src="/src/assets/feedback.svg" alt="Feedback" className="w-[0.875rem] h-[1.063rem]" />
-                        </button>
-                    </div>
-                )
-            }
-            },
-            grow: 3,
-        }
-    ]
     return (
         <>
             <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]" onClick={getTheValue}>
@@ -310,14 +162,76 @@ const Query = () => {
                         </div>
                     </div>
                     <div className="flex flex-col justify-between h-[81.846vh]">
-                        <div className="bg-[white] h-[60.761vh] w-[82.031vw] border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20 ">
-                            <div className="w-[98%] flex flex-col border-t-2 border-blue-500 ">
-                                <div className="p-3 text-[black]/80 text-[1.1rem]">clients Jobs</div>
-                                <div className="flex justify-end items-center">
+                        <div className="bg-[white] h-[73vh] w-[82.031vw] border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20">
+                            <div className="w-[79.688vw] h-[39.918vh] border-t-[3px] border-[#3C8DBC]  rounded-[3px]">
+                                <div className="text-[1.1rem]">
+                                    <div className="p-2">
+                                        User Profile
+                                    </div>
+                                    <hr />
+                                    <div className="shadow-black/30 shadow-sm">
+                                        <div className="">
+                                            <button className={` w-[50%] h-[6vh] text-[0.9rem]  text-[black]/80 bg-[#fff] hover:bg-[#e4e2e2] `} onClick={handleProfile}>User Info</button>
+                                            <button className={`${window.location.pathname == "/changePassword" ? "bg-[#367FA9] text-white" : "text-[black]"} w-[50%] text-[0.9rem] h-[6vh] hover:bg-[#2c6b8f]`} >Change Password</button>
+                                        </div>
+                                    </div>
+                                    <div className="h-[58.4vh] w-[79.7vw] bg-[#F5F5F5] border-[0.5px] border-[black]/20">
+                                        <div className="w-[100%] h-[25vh] flex flex-col justify-around items-center ">
 
-                                    <div className="text-black/80 text-[0.9rem]">Search: <input type="text" className="border-[1px] border-black/30 rounded-[3px] h-[1.875rem] w-[9.688rem] text-[0.8rem] px-2 focus:outline-none " onChange={handleChange} /></div>
+                                        <div className="w-[92%] flex justify-between">
+                                                <div>
+                                                    <div className="font-bold text-[0.85rem]">
+                                                        Current Password
+                                                    </div>
+                                                    <div className="flex">
+                                                        <div className="w-[3.021vw] h-[5.812vh] border-[0.5px] bg-[#FFFFFF] border-[black]/20 border-r-transparent flex items-center justify-center ">
+                                                            <img src="/src/assets/Icon.svg" alt="" />
+                                                        </div>
+                                                        <input type="text" className="border-[0.5px] border-[black]/20 w-[70.25vw] text-[0.8rem] px-2 focus:outline-none focus:border-[0.5px] focus:border-[blue]/70" />
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div className="w-[92%] flex justify-between">
+                                                <div>
+                                                    <div className="font-bold text-[0.85rem]">
+                                                        New Password
+                                                    </div>
+                                                    <div className="flex">
+                                                        <div className="w-[3.021vw] h-[5.812vh] border-[0.5px] bg-[#FFFFFF] border-[black]/20 border-r-transparent flex items-center justify-center ">
+                                                            <img src="/src/assets/Icon.svg" alt="" />
+                                                        </div>
+                                                        <input type="text" className="border-[0.5px] border-[black]/20 w-[31.25vw] text-[0.8rem] px-2 focus:outline-none focus:border-[0.5px] focus:border-[blue]/70" />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div className="font-bold text-[0.85rem]">
+                                                        Confirm Password
+                                                    </div>
+                                                    <div className="flex">
+                                                        <div className="w-[3.021vw] h-[5.812vh] border-[0.5px] bg-[#FFFFFF] border-[black]/20 border-r-transparent flex items-center justify-center ">
+                                                            <img src="/src/assets/Icon.svg" alt="" />
+                                                        </div>
+                                                        <input type="text" className="border-[0.5px] border-[black]/20  w-[31.25vw] text-[0.8rem] px-2 focus:outline-none focus:border-[0.5px] focus:border-[blue]/70" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+
+                                        </div>
+                                        <div className="w-[76vw] flex justify-end">
+                                            <button className="bg-[#367FA9] text-white flex justify-center items-center h-[6vh] w-[7vw] rounded-[2px]">
+                                                <div className="font-bold text-[1.7rem] mb-1">
+                                                    +
+                                                </div>
+                                                <div className="text-[0.9rem]">
+                                                    Update
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <DataTable data={filterQueries} columns={columns} pagination paginationPerPage={3} noDataComponent={error ? `There are no data to display` : `Loading...`} ></DataTable>
+
                             </div>
                         </div>
                         <footer className="bg-[white] w-[82.031vw] h-[8.662vh] shadow-upperShadow flex items-center justify-center">
@@ -341,4 +255,4 @@ const Query = () => {
         </>
     )
 }
-export default Query;
+export default ChangePassword;

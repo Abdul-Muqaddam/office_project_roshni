@@ -3,8 +3,11 @@ import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import Cookies from "js-cookie";
 import { categoryContext } from "./context/categoryContext";
+import { useMediaQuery } from "react-responsive";
 const Login = () => {
-    const { clientId , setClientId }=useContext(categoryContext)
+    const is750px=useMediaQuery({minWidth:750})
+    const is280px=useMediaQuery({minWidth:280})
+
     const navigate=useNavigate()
     // const dispatch=useDispatch();
     const [inputLogin, setinputLogin] = useState({
@@ -54,6 +57,7 @@ const Login = () => {
 
                 let response=await axios.post("https://chat.roshni.online/api/authenticate",inputLogin)
                 let api_token=response.data.token
+                console.log(response)
                 Cookies.set("token",api_token,{ expires: 7 })
                 Cookies.set("clientid",response.data.client_id,{expires:7})
                 if(response.status===200){
@@ -77,7 +81,7 @@ const Login = () => {
                         // setName(role_response.data.firstname)
                         Cookies.set("name",client_response.data.firstname,{expires:7})
                         // setClientId(role_response.data.id)
-                        navigate("/dashboard")
+                        navigate("/dashboard",{replace:true})
                         alert("Login successfully")
                     }
 
@@ -94,10 +98,11 @@ const Login = () => {
         <>
             <div className="h-[100vh] w-[100%] flex items-center justify-center flex-col">
                 <div className="h-[90vh] w-[95%] flex flex-col items-center">
-                    <div className="text-[#317EAC] font-normal text-[1.875rem] mt-[0.85rem] mb-[2rem]">
-                        Welcome to Roshini
-                    </div>
-                    <div className="h-[50vh] w-[42vw] bg-[#eeeeeed8] rounded-[5px] flex flex-col justify-center items-center border-[1px] border-[grey]/30">
+                <div className={`text-[#317EAC] font-normal text-[clamp(1rem,1vw+1.5rem,2rem)] mt-[0.85rem] mb-[2rem]`}>
+                    Welcome to Roshini
+                </div>
+
+                    <div className={`${is750px?"h-[50vh] w-[42vw] bg-[#eeeeeed8] rounded-[5px] flex flex-col justify-center items-center border-[1px] border-[grey]/30":"h-[50vh] w-[72vw] bg-[#eeeeeed8] rounded-[5px] flex flex-col justify-center items-center border-[1px] border-[grey]/30"}`}>
                         <div className="w-[93%] ">
                             <div >
                                 <div className="flex items-center mb-[1rem]">
@@ -121,7 +126,7 @@ const Login = () => {
                             </div>
                         </div>
                         <div className="flex flex-col items-center">
-                            <button className="bg-[#31A5E7] text-[white] h-[2.375rem] w-[11.063rem] rounded-[5px] text-[0.9rem] mb-[0.5rem]" onClick={handleClick}>Login</button>
+                            <button className="bg-[#31A5E7] text-[white] h-[2rem] w-[11.063rem] rounded-[5px] text-[0.9rem] mb-[0.5rem]" onClick={handleClick}>Login</button>
                             <Link to="/signup" className="text-[#31A5E7] text-[0.9rem]">Register As Customer</Link>
                             <a href="" className="text-[#31A5E7] text-[0.9rem]">Register As Service Provider</a>
                         </div>

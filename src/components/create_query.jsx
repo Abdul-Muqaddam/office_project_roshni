@@ -1,13 +1,36 @@
 import axios from "axios";
-import React, { useEffect, useState, useContext, }  from "react";
+import React, { useEffect, useState, }  from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { categoryContext } from "./context/categoryContext";
 import Cookies from "js-cookie";
 const Create_query = () => {
     const [LocalQueryData,setLocalQueryData]=useState()
+    const [categoryIndex,setCategoryIndex]=useState()
     const [data,setData]=useState([])
     const navigate=useNavigate();
+
+    const [profilePopupVisible,setProfilePopupVisible]=useState(false);  
+    // "isProfilePopupVisible" is used to toggle the display of the profile popup on the right side.
+    // When true, the popup is shown; when false, the popup is hidden. This state is controlled by
+    // clicking on the profile icon or username to display/hide user options like "Profile" and "Sign out."
+
+
+    const handleprofilePopupVisible=()=>{
+        if(profilePopupVisible){
+            setProfilePopupVisible(false) 
+        }   
+        else{
+            setProfilePopupVisible(true) 
+        }    // this is help to toggle the isProfilePopupVisible
+    }
+    const getTheValue=()=>{
+        if(profilePopupVisible){
+            setProfilePopupVisible(false)    // close the isProfilePopupVisible whereever userClick
+        }
+    }
+    const handleProfile=()=>{
+        navigate("/userProfile")
+    }
     const handlePostFreeQuery=()=>{
         if(LocalQueryData==null){
             alert("Please select the category")
@@ -20,6 +43,8 @@ const Create_query = () => {
     const handleChangeSelect=(e)=>{
         const selectedText= e.target.options[e.target.selectedIndex]
         setLocalQueryData(selectedText.text)
+        setCategoryIndex(e.target.selectedIndex)
+        console.log(e.target.selectedIndex)
         console.log(selectedText.text)
     }
     const handlePaidClick=()=>{
@@ -28,9 +53,61 @@ const Create_query = () => {
         }
         else{
             Cookies.set("queryData",LocalQueryData,{expires:7})
-            navigate("/assignedqueries")
+            try {
+                const fetchapi=async()=>{
+                    const response=await axios.post("https://chat.roshni.online/api/client/query/responseType",{
+                        "id":Number(Cookies.get("clientid")),
+                        "category":Number(categoryIndex),
+                        "query_type":"paid"
+                    },{
+                        headers:{
+                            "Authorization":`Bearer ${Cookies.get("token")}`
+                        }
+                    })
+                    Cookies.set("professionalid",response.data.professional_id,{expires:7})
+                    if(response.status==200){
+                        try {
+                            const fetchapi=async()=>{
+                                const response=await axios.get(`https://chat.roshni.online/api/professionals/${Cookies.get("professionalid")}`,{
+                                    headers:{
+                                        "Authorization":`Bearer ${Cookies.get("token")}`
+                                    }
+                                })
+                                alert("Your query has been assigned to this " + response.data.firstname+response.data.lastname + " Professional")
+                                navigate("/assignedqueries")
+                            }
+                            fetchapi()
+                        } catch (error) {
+                            alert("There is some issue")
+                        }
+                    }
+                    console.log(response)
+                }
+                fetchapi();
+            } catch (error) {
+                alert("There is some issue")
+            }
         }
     }
+    const handleSignOut= async ()=>{
+        
+        try {
+            const response=await axios.post("https://chat.roshni.online/api/logout",{},{
+                headers:{
+                    "Authorization":`Bearer ${Cookies.get("token")}`
+                }  
+            })
+            if(response.status==200){
+                alert(response.data.message)
+                    navigate("/");
+
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        
+   
+}
     useEffect(()=>{
         const fetchCategories= async()=>{
             const response=await axios.get("https://chat.roshni.online/api/categories")
@@ -41,7 +118,7 @@ const Create_query = () => {
     },[])
     return (
         <>
-            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]">
+            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]" onClick={getTheValue}>
                 <aside className="w-[17.969vw] h-[100vh]">
                     <div className="w-[17.969vw] h-[8.547vh] bg-[#367FA9] flex items-center justify-center text-[white]" >
                         <div className="w-[10.262vw] flex justify-between items-center">
@@ -58,7 +135,7 @@ const Create_query = () => {
                             <div className="w-[9.5vw] flex items-center justify-between">
                                 <img src="src/assets/user_profile.svg" alt="" />
                                 <div>
-                                    <div className="text-[0.875rem] font-semibold">{window.localStorage.getItem("name")}</div>
+                                    <div className="text-[0.875rem] font-semibold">{Cookies.get("name")}</div>
                                     <div className="flex items-center justify-between w-[3.8vw] h-[1.3rem]">
                                         <div className="w-[0.666rem] h-[0.666rem] bg-[#3C763D] rounded-[1rem]"></div>
                                         <div className="text-[0.688rem]">Online</div>
@@ -103,10 +180,25 @@ const Create_query = () => {
                         <div>
                             <img src="" alt="" />
                         </div>
-                        <div className="flex items-center h-[8.547vh] w-[81.031vw] justify-end">
+                        <div className="flex items-center h-[8.547vh] w-[82.031vw] justify-end" >
+                            <div className="cursor-pointer flex hover:bg-[#2f7096] h-[100%] items-center px-2" onClick={handleprofilePopupVisible}>
                             <img src="src/assets/user_profile.svg" alt="" className="h-[1.563rem]" />
-                            <div className="text-white ml-[0.9vw]">{window.localStorage.getItem("name")}</div>
+                            <div className="text-white ml-[0.9vw]">{Cookies.get("name")}</div>
+                            </div>
                         </div>
+                        <div className={`w-[21.875vw] h-[37.916vh] top-14 right-1 ${profilePopupVisible?"absolute":"hidden"} z-10`} >
+                                <div className="bg-[#3C8DBC] w-[100%] h-[78%] flex flex-col items-center ">
+                                    <img src="./src/assets/user_profile.jpg" alt="" className="rounded-[5rem] mt-[1.8vh] h-[15.385vh] border-4 border-[#63A4C9]" />
+                                    <div className="text-white">{Cookies.get("name")}</div>
+                                </div>
+                                <div className="bg-[white] h-[22%] flex items-center justify-center ">
+                                    <div className="w-[90%] flex justify-between items-center">
+                                        <button className="border-[1px] border-[#ADADAD]/60 bg-[#F4F4F4] text-[#666666] text-[0.85rem] px-2 py-[4px] hover:bg-[#E7E7E7]" onClick={handleProfile}>Profile</button>
+                                        <button className="border-[1px] border-[#ADADAD]/60 bg-[#F4F4F4] text-[#666666] text-[0.85rem] px-2 py-[4px] hover:bg-[#E7E7E7]" onClick={handleSignOut}>Sign out</button>
+                                    </div>
+                                </div>
+
+                            </div>
                     </nav>
                     <div className="w-[82.031vw] h-[9.573vh] flex items-center justify-center">
                         <div className="h-[9.573vh] w-[80.031vw] flex items-center justify-between">

@@ -38,13 +38,17 @@ const Chat_converse=()=>{
             const autojoinnew=autojoin?autojoin.split(","):[];
 
             window.converse.initialize({
-                auto_join_private_chats: autojoinnew,
+                auto_join_private_chats: [autojoinnew],
                 bosh_service_url:`${Cookies.get("boshURL")}`,
                 jid:`${Cookies.get("jid")}`,
                 password:`${Cookies.get("password")}`,
                 auto_login:true,
                 debug:true,
-                view_mode: 'fullscreen',
+                allow_contact_requests:true,
+                show_desktop_notification:true,
+                allow_non_roster_messaging:true,
+                keepalive:true,
+                // view_mode: 'fullscreen',
             })
         }
         fetchapi();
