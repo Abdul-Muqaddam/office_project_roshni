@@ -202,7 +202,7 @@ function Signup() {
                             <div className="flex justify-center items-center h-[10.375vh] w-[2.375rem] bg-[#E1E1E4] rounded-l-[0.3rem]">
                                 <img src="/src/assets/info.png" alt="" className="h-[1.1rem]" />
                             </div>
-                            <textarea type="text" name="description" className={`${inputTextAreaWidth} w-[95vw] h-[10vh] text-[0.85rem] p-[0.5rem] rounded-r-[0.3rem] px-[0.5rem] pb-[0.125rem] focus:outline-none border-[1px] border-transparent focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 focus:border-blue-400 focus:shadow-lg focus:shadow-blue-400/50 transition duration-300`} value={inputData.description} onChange={Handle_input_data} />
+                            <textarea type="text" name="description" className={`${inputTextAreaWidth} h-[10vh] text-[0.85rem] p-[0.5rem] rounded-r-[0.3rem] px-[0.5rem] pb-[0.125rem] focus:outline-none border-[1px] border-transparent focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 focus:border-blue-400 focus:shadow-lg focus:shadow-blue-400/50 transition duration-300`} value={inputData.description} onChange={Handle_input_data} />
                         </div>
                     </div>
                     <button className="w-[98vw] bg-[#2fa4e7] text-[white] h-[7vh] mt-[1rem] font-medium rounded-[0.5rem] focus:outline-none" onClick={handle_click}>Register</button>
