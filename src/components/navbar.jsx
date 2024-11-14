@@ -1,8 +1,13 @@
 import React from "react";
 import Cookies from "js-cookie";
 import { useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
 
 const Navbar=()=>{
+    const navigate=useNavigate();
+    const is765px=useMediaQuery({maxWidth:765})
+    const isFullWidth=is765px?"w-[100vw]":"w-[82.031vw]"
     const [profilePopupVisible,setProfilePopupVisible]=useState(false);  
     const handleprofilePopupVisible=()=>{
         if(profilePopupVisible){
@@ -42,16 +47,16 @@ const Navbar=()=>{
     }
     return(
         <>
-        <nav className="bg-[#3C8DBC] w-[82.031vw] h-[8.547vh]">
+        <nav className={`bg-[#3C8DBC] h-[8.547vh]`}>
                         <div>
                             <img src="" alt="" />
                         </div>
-                        <div className="flex items-center h-[8.547vh] w-[82.031vw] justify-end ">
+                        <div className="flex items-center h-[50.1px]  justify-end ">
                             <div className="hover:bg-[#32769e] flex h-[100%] items-center px-2 cursor-pointer" onClick={handleprofilePopupVisible}>
                                 <img src="src/assets/user_profile.svg" alt="" className="h-[1.563rem]" />
                                 <div className="text-white ml-[0.9vw]">{Cookies.get("name")}</div>
                             </div>
-                            <div className={`w-[21.875vw] h-[37.916vh] top-14 right-1 ${profilePopupVisible?"absolute":"hidden"} z-10`} >
+                            <div className={`w-[280px] h-[221.85px] top-14 right-1 ${profilePopupVisible?"absolute":"hidden"} z-10`} >
                                 <div className="bg-[#3C8DBC] w-[100%] h-[78%] flex flex-col items-center ">
                                     <img src="./src/assets/user_profile.jpg" alt="" className="rounded-[5rem] mt-[1.8vh] h-[15.385vh] border-4 border-[#63A4C9]" />
                                     <div className="text-white">{Cookies.get("name")}</div>

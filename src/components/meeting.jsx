@@ -8,6 +8,7 @@ import AsideComponent from "./asideComponent";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
+import { replace } from "dom/lib/mutation";
 const Meeting = () => {
     const navigate=useNavigate()
     const [roomName, setRoomName] = useState("")
@@ -25,7 +26,14 @@ const Meeting = () => {
                 setDomain(response.data.VideoServerUrl)
                 console.log(response.data.VideoServerUrl)
             } catch (error) {
-
+                const keys=  Object.keys(error.response.data)
+                const errorKey=('error',keys)
+                console.log(error.response.data)
+                const status=error.status
+                if(status==403 || errorKey){
+                    navigate("/assignedqueries", {replace:true})
+                    alert("Client haven't accept the query")
+                }
             }
 
         }

@@ -11,6 +11,7 @@ import AsideComponent from "./asideComponent";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
+import { useMediaQuery } from "react-responsive";
 const Query = () => {
     const navigate = useNavigate();
     // const userInfo=useSelector((state)=>state.user.userInfo)
@@ -20,6 +21,9 @@ const Query = () => {
     const [error, setError] = useState(false)
 
     const [profilePopupVisible, setProfilePopupVisible] = useState(false);
+
+    const is765px=useMediaQuery({minWidth:765})
+    const isFlex=is765px?"flex":"";
     // "isProfilePopupVisible" is used to toggle the display of the profile popup on the right side.
     // When true, the popup is shown; when false, the popup is hidden. This state is controlled by
     // clicking on the profile icon or username to display/hide user options like "Profile" and "Sign out."
@@ -147,7 +151,7 @@ const Query = () => {
             selector: state => {
                 if(state.status=="inprogress"){
                     return (
-                        <div className="flex w-[20vw] justify-between">
+                        <div className="flex w-[310px] justify-between">
                         <button onClick={() => handleEditButton(state.query_id)} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
                             <img src="/src/assets/edit.svg" alt="" title="Edit" className=" w-[0.875rem] h-[1.063rem]" />
                         </button>
@@ -169,7 +173,7 @@ const Query = () => {
             }
             if(state.status=="assigned"){
                 return(
-                    <div className="flex w-[23vw] justify-between">
+                    <div className="flex w-[290px] justify-between">
                         <button onClick={() => handleEditButton(state.query_id)} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
                             <img src="/src/assets/edit.svg" alt="" title="Edit" className=" w-[0.875rem] h-[1.063rem]" />
                         </button>
@@ -193,7 +197,7 @@ const Query = () => {
             }
             if(state.status=="completed"){
                 return(
-                    <div className="flex w-[6.7vw] justify-between">
+                    <div className="flex w-[90.4px] justify-between">
                         <button onClick={handleJobGallaryButton} className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
                             <img src="/src/assets/img.svg" alt="" title="Edit" className=" w-[0.875rem] h-[1.063rem]" />
                         </button>                        
@@ -209,15 +213,15 @@ const Query = () => {
     ]
     return (
         <>
-            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]" onClick={getTheValue}>
+            <div className={` w-[100vw] ${isFlex} bg-[#ECF0F5]`} onClick={getTheValue}>
                 <AsideComponent/>
-                <div className="w-[82.031vw] h-[73.846vh] bg-[#ECF0F5]">
+                <div className=" h-[73.846vh] bg-[#ECF0F5]">
                     <Navbar/>
-                    <div className="w-[82.031vw] h-[9.573vh] flex items-center justify-center">
+                    
                         <ClientSectionMainHeader/>
-                    </div>
+                    
                     <div className="flex flex-col justify-between h-[81.846vh]">
-                        <div className="bg-[white] h-[60.761vh] w-[82.031vw] border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20 ">
+                        <div className="bg-[white]   border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20 ">
                             <div className="w-[98%] flex flex-col border-t-2 border-blue-500 ">
                                 <div className="p-3 text-[black]/80 text-[1.1rem]">clients Jobs</div>
                                 <div className="flex justify-end items-center">

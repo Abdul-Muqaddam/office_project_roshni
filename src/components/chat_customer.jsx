@@ -8,6 +8,7 @@ import AsideComponent from "./asideComponent";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
+import { useMediaQuery } from "react-responsive";
 const Chat_customer = () => {
     const navigate=useNavigate();
     const [data, setData] = useState([])
@@ -18,6 +19,11 @@ const Chat_customer = () => {
     // When true, the popup is shown; when false, the popup is hidden. This state is controlled by
     // clicking on the profile icon or username to display/hide user options like "Profile" and "Sign out."
 
+    const is765px=useMediaQuery({minWidth:765})
+
+    const isFlex=is765px?"flex":"";
+
+    const isWidthDataTable=is765px?"w-[79.688vw]":"w-[95vw]"
 
     const handleprofilePopupVisible=()=>{
         if(profilePopupVisible){
@@ -131,7 +137,7 @@ const Chat_customer = () => {
             selector: State => {
                 return (
                     <>
-                        <div className="flex justify-between w-[30vw]">
+                        <div className="flex justify-between w-[390px]">
                             <Link to={"/edit_client"} className="bg-[#00C0EF] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[2.851rem]">
                                 <img src="/src/assets/edit.svg" alt="" />
                                 Edit
@@ -149,7 +155,7 @@ const Chat_customer = () => {
                                 Subscription
                             </Link>
                         </div>
-                        <div className="flex justify-between w-[19.5vw] mt-[1px]">
+                        <div className="flex justify-between w-[250px] mt-[1px]">
                             <Link to={"/subscription_list"} className="bg-[#3C8DBC] flex items-center justify-center text-[white] rounded-[3px] h-[1.333rem] w-[7.541rem]">
                                 <img src="/src/assets/menu.svg" alt="" />
                                 Subscription List
@@ -174,14 +180,14 @@ const Chat_customer = () => {
     }
     return (
         <>
-            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]" onClick={getTheValue}>
+            <div className={`h-[100vh] w-[100vw] ${isFlex} bg-[#ECF0F5]`} onClick={getTheValue}>
                 <AsideComponent/>
-                <div className="w-[82.031vw] h-[73.846vh] bg-[#ECF0F5]">
+                <div className=" h-[73.846vh] bg-[#ECF0F5]">
                     <Navbar/>
                     <ClientSectionMainHeader/>
                     <div className="flex flex-col justify-between h-[81.846vh]">
-                        <div className="bg-[white] h-[43.761vh] w-[82.031vw] border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20">
-                            <div className="w-[79.688vw] h-[39.918vh] border-t-[3px] border-[#3C8DBC]  rounded-[3px]">
+                        <div className="bg-[white] h-[43.761vh]  border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20">
+                            <div className={`${isWidthDataTable} h-[39.918vh] border-t-[3px] border-[#3C8DBC]  rounded-[3px]`}>
                                 <div className="flex justify-end mt-2">
                                     Search:&nbsp; <input type="text" className="focus:outline-none border-gray-500 border-[0.5px] px-2 py-1 text-[0.8rem]" onChange={handleFilter} />
                                 </div>
