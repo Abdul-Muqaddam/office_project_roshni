@@ -11,6 +11,11 @@ const Navbar=()=>{
     const navigate=useNavigate();
     const is765px=useMediaQuery({maxWidth:765})
     const isFullWidth=is765px?"w-[100vw]":"w-[82.031vw]"
+
+    const is1000px=useMediaQuery({maxWidth:1000})
+    const isPostionCard=is1000px?"right-[-40px]":"right-[1px]"
+    const isPostionCardRight765px=is765px?"right-[0px]":"";
+    const isPostionCardup765px=is765px?"top-[100px]":"";
     const {profilePopupVisible,setProfilePopupVisible}=useContext(ProfilePopupVisbleContext)
     const handleprofilePopupVisible = () => {
         setProfilePopupVisible(!profilePopupVisible); // Toggle the state
@@ -49,12 +54,12 @@ const Navbar=()=>{
                         <div>
                             <img src="" alt="" />
                         </div>
-                        <div className="flex items-center h-[50.1px]  justify-end ">
-                            <div className="hover:bg-[#32769e] flex h-[100%] items-center px-2 cursor-pointer" onClick={handleprofilePopupVisible}>
+                        <div className="flex items-center h-[8.547vh]  justify-end ">
+                            <div className="hover:bg-[#32769e] flex h-[8.547vh] items-center px-2 cursor-pointer" onClick={handleprofilePopupVisible}>
                                 <img src="src/assets/user_profile.svg" alt="" className="h-[1.563rem]" />
                                 <div className="text-white ml-[0.9vw]">{Cookies.get("name")}</div>
                             </div>
-                            <div className={`w-[280px] h-[221.85px] top-14 right-1 ${profilePopupVisible?"absolute":"hidden"} z-10`} >
+                            <div className={`w-[250px] h-[221.85px] top-14 ${isPostionCard} ${profilePopupVisible?"absolute":"hidden"} ${isPostionCardup765px} ${isPostionCardRight765px} z-10`} >
                                 <div className="bg-[#3C8DBC] w-[100%] h-[78%] flex flex-col items-center ">
                                     <img src="./src/assets/user_profile.jpg" alt="" className="rounded-[5rem] mt-[1.8vh] h-[15.385vh] border-4 border-[#63A4C9]" />
                                     <div className="text-white">{Cookies.get("name")}</div>

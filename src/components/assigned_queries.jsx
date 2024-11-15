@@ -73,6 +73,9 @@ const Assigned_queries = () => {
         Cookies.set("queryid", query_Id, { expires: 7 })
         navigate("/meeting")
     }
+    const handleFeedback=()=>{
+        navigate("/feedback")
+    }
     useEffect(() => {
         const fetchapi = async () => {
             try {
@@ -101,7 +104,7 @@ const Assigned_queries = () => {
     }, [queries])
 
     const HandleChatClick = async () => {
-        navigate("/chat_converse")
+        // navigate("/chat_converse")
     }
     const handleJobGalleryButton = () => {
         navigate("/jobGallary")
@@ -205,7 +208,7 @@ const Assigned_queries = () => {
                             <button title="Start Video Call" className="bg-[#00A65A] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]" onClick={() => HandleMeetingClick(state.roomName, state.query_id, state.professional_id)}>
                                 <img src="/src/assets/call.svg" alt="Call" className="w-[0.875rem] h-[1.063rem]" />
                             </button>
-                            <button title="FeedBack" className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px]">
+                            <button title="FeedBack" className="bg-[#00C0EF] w-[2.5rem] h-[2.125rem] flex items-center justify-center rounded-[3px] " onClick={handleFeedback}>
                                 <img src="/src/assets/feedback.svg" alt="Feedback" className="w-[0.875rem] h-[1.063rem]" />
                             </button>
                         </div>

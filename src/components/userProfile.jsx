@@ -8,7 +8,22 @@ import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
 import { ProfilePopupVisbleContext } from "./context/categoryContext";
+import { useMediaQuery } from "react-responsive";
 const UserProfile = () => {
+
+    const is765px=useMediaQuery({minWidth:765})
+    const isFlex=is765px?"flex":"block"
+
+    const isfull=is765px?"w-[82.031vw]":"w-[100vw]";
+
+    const isfullChild=is765px?"w-[79.688vw]":"w-[95vw]"
+
+    const isFullWidth=is765px?"w-[70.25vw]":"w-[84.25vw]"
+
+    const isFullButton=is765px?"w-[76vw]":"w-[90vw]"
+
+
+
     const {profilePopupVisible,setProfilePopupVisible}=useContext(ProfilePopupVisbleContext)
     const navigate=useNavigate()
     const [data,setData]=useState({
@@ -171,14 +186,14 @@ const UserProfile = () => {
     }
     return (
         <>
-            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]" onClick={getTheValue}>
+            <div className={`h-[100vh] w-[100vw] ${isFlex} bg-[#ECF0F5]`} onClick={getTheValue}>
                 <AsideComponent/>
-                <div className="w-[82.031vw] h-[73.846vh] bg-[#ECF0F5]">
+                <div className={` ${isfull} h-[73.846vh] bg-[#ECF0F5]`}>
                     <Navbar/>
                     <ClientSectionMainHeader/>
                     <div className="flex flex-col justify-between h-[81.846vh]">
-                        <div className="bg-[white] h-[73vh] w-[82.031vw] border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20">
-                            <div className="w-[79.688vw] h-[39.918vh] border-t-[3px] border-[#3C8DBC]  rounded-[3px]">
+                        <div className={`bg-[white] h-[73vh] ${isfull} border-t-[3px] border-[#D2D6DE] rounded-[3px] flex justify-center shadow-sm shadow-[black]/20`}>
+                            <div className={`${isfullChild} h-[39.918vh] border-t-[3px] border-[#3C8DBC]  rounded-[3px]`}>
                                 <div className="text-[1.1rem]">
                                     <div className="p-2">
                                     User Profile    
@@ -190,7 +205,7 @@ const UserProfile = () => {
                                         <button className={`w-[50%] text-[0.9rem] text-[black]/80 bg-[#fff] hover:bg-[#e4e2e2] h-[6vh]`} onClick={handleProfile}>Change Password</button>
                                         </div>
                                     </div>
-                                    <div className="h-[58.4vh] w-[79.7vw] bg-[#F5F5F5] border-[0.5px] border-[black]/20">
+                                    <div className={`h-[58.4vh] ${isfullChild} bg-[#F5F5F5] border-[0.5px] border-[black]/20`}>
                                         <div className="w-[100%] h-[50vh] flex flex-col justify-around items-center ">
                                             <div className="w-[92%] flex justify-between">
 
@@ -246,15 +261,15 @@ const UserProfile = () => {
                                             </div>    
                                             </div>
                                             <div className="w-[92%] flex justify-between">  
-                                            <div>
+                                            <div className="">
                                                 <div className="font-bold text-[0.85rem]">
                                                     User Name
                                                 </div>
-                                                <div className="flex">
+                                                <div className="flex ">
                                                     <div className="w-[3.021vw] h-[5.812vh] border-[0.5px] bg-[#FFFFFF] border-[black]/20 border-r-transparent flex items-center justify-center ">
                                                         <img src="/src/assets/Icon.svg" alt="" />
                                                     </div>
-                                                    <input name="username" type="text" className="border-[0.5px] border-[black]/20 w-[70.25vw] text-[0.8rem] px-2 focus:outline-none focus:border-[0.5px] focus:border-[blue]/70" value={data.username} onChange={handleChange}/>
+                                                    <input name="username" type="text" className={`border-[0.5px] ${isFullWidth} border-[black]/20  text-[0.8rem] px-2 focus:outline-none focus:border-[0.5px] focus:border-[blue]/70`} value={data.username} onChange={handleChange}/>
                                                 </div>
                                                 <p className="text-[red]">{error.username}</p>
                                             </div>    
@@ -266,20 +281,18 @@ const UserProfile = () => {
                                                     Description
                                                 </div>
                                                 <div className="flex">
-                                                    <div className="w-[3.021vw] h-[9.5vh] border-[0.5px] bg-[#FFFFFF] border-[black]/20 border-r-transparent flex items-center justify-center ">
+                                                    <div className="w-[3.021vw] h-[55.575px] border-[0.5px] bg-[#FFFFFF] border-[black]/20 border-r-transparent flex items-center justify-center ">
                                                         <img src="/src/assets/Icon.svg" alt="" />
                                                     </div>
                                                 
-                                                    <textarea name="description" type="text" className="border-[0.5px] border-[black]/20 w-[70.25vw] text-[0.8rem] p-2 focus:outline-none focus:border-[0.5px] focus:border-[blue]/70" value={data.description} onChange={handleChange}/>
-                                                
-                                                
+                                                    <textarea name="description" type="text" className={`border-[0.5px] border-[black]/20 ${isFullWidth} text-[0.8rem] p-2 focus:outline-none focus:border-[0.5px] focus:border-[blue]/70`} value={data.description} onChange={handleChange}/>                                                
                                                 </div>
                                             </div>    
                                                 
                                             </div>
                                         </div>
-                                            <div className="w-[76vw] flex justify-end">
-                                                <button className="bg-[#367FA9] text-white flex justify-center items-center h-[6vh] w-[7vw] rounded-[2px]" onClick={handleButton}>
+                                            <div className={`${isFullButton} flex justify-end`}>
+                                                <button className="bg-[#367FA9] text-white flex justify-center items-center h-[35.1px] w-[89.6px] rounded-[2px]" onClick={handleButton}>
                                                     <div className="font-bold text-[1.7rem] mb-1">
                                                         +
                                                     </div>
@@ -287,10 +300,9 @@ const UserProfile = () => {
                                                         Update
                                                     </div>
                                                 </button>
-                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                
+                                </div> 
                             </div>
                         </div>
                         <Footer/>
