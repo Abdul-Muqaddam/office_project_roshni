@@ -6,7 +6,15 @@ import AsideComponent from "./asideComponent";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
+import { ProfilePopupVisbleContext } from "./context/categoryContext";
+
 const Post_free_query = () => {
+    const {profilePopupVisible,setProfilePopupVisible}=useContext(ProfilePopupVisbleContext)
+
+    const handleProfileVisiblePopup=()=>{
+        setProfilePopupVisible(!profilePopupVisible)
+    }
+
     const [answer,setAnswer]=useState("")
     const [data,setData]=useState({
         "client_id":Cookies.get("clientid"),
@@ -44,7 +52,7 @@ const Post_free_query = () => {
     }
     return (
         <>
-            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]">
+            <div className="h-[100vh] w-[100vw] flex bg-[#ECF0F5]" onClick={handleProfileVisiblePopup}>
                 <AsideComponent/>
                 <div className="w-[82.031vw] h-[73.846vh] bg-[#ECF0F5]">
                     <Navbar/>

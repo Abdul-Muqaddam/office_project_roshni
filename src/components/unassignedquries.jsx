@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, } from "react";
+import React, { createContext, useState, useEffect, useContext, } from "react";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import Cookies from "js-cookie";
@@ -9,13 +9,14 @@ import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
 import { useMediaQuery } from "react-responsive";
+import { ProfilePopupVisbleContext } from "./context/categoryContext";
 
 const UnAssignedQuery = () => {
+    const {profilePopupVisible,setProfilePopupVisible}=useContext(ProfilePopupVisbleContext)
     const navigate=useNavigate();
     const [data,setData]=useState([])
     const [filterQueries,setFilterQueries]=useState([])
     const [error,setError]=useState(false)
-    const [profilePopupVisible,setProfilePopupVisible]=useState(false);  
 
     const is765px=useMediaQuery({minWidth:765})
 

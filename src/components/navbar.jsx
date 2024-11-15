@@ -1,22 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
+import { ProfilePopupVisbleContext } from "./context/categoryContext";
+import axios from "axios";
+
 
 const Navbar=()=>{
     const navigate=useNavigate();
     const is765px=useMediaQuery({maxWidth:765})
     const isFullWidth=is765px?"w-[100vw]":"w-[82.031vw]"
-    const [profilePopupVisible,setProfilePopupVisible]=useState(false);  
-    const handleprofilePopupVisible=()=>{
-        if(profilePopupVisible){
-            setProfilePopupVisible(false) 
-        }   
-        else{
-            setProfilePopupVisible(true) 
-        }    // this is help to toggle the isProfilePopupVisible
-    }
+    const {profilePopupVisible,setProfilePopupVisible}=useContext(ProfilePopupVisbleContext)
+    const handleprofilePopupVisible = () => {
+        setProfilePopupVisible(!profilePopupVisible); // Toggle the state
+    };
     const handleProfile=()=>{
         navigate("/userProfile")
     }

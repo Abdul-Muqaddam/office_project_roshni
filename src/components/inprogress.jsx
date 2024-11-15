@@ -1,4 +1,4 @@
-import React, {  useState, useEffect } from "react";
+import React, {  useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import DataTable from "react-data-table-component";
@@ -9,13 +9,13 @@ import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
 import { useMediaQuery } from "react-responsive";
+import { ProfilePopupVisbleContext } from "./context/categoryContext";
 const Inprogress = () => {
+    const {profilePopupVisible,setProfilePopupVisible}=useContext(ProfilePopupVisbleContext)
     const navigate=useNavigate()
     const [data,setData]=useState([])
     const [filterQueries,setFilterQueries]=useState([])
-    const [loading,setLoading]=useState(true)
-    const [profilePopupVisible,setProfilePopupVisible]=useState(false);
-    
+    const [loading,setLoading]=useState(true)    
     const is765px=useMediaQuery({minWidth:765})
     const isFlex=is765px?"flex":"";
     const isWidthDataTable=is765px?"w-[79.688vw]":"w-[95vw]"

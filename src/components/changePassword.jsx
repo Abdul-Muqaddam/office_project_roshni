@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useContext, useState} from "react";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -7,10 +7,12 @@ import AsideComponent from "./asideComponent";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
+import { ProfilePopupVisbleContext } from "./context/categoryContext";
+
 const ChangePassword = () => {
     const navigate = useNavigate()
 
-    const [profilePopupVisible, setProfilePopupVisible] = useState(false);
+    const {profilePopupVisible, setProfilePopupVisible} = useContext(ProfilePopupVisbleContext);
     // "isProfilePopupVisible" is used to toggle the display of the profile popup on the right side.
     // When true, the popup is shown; when false, the popup is hidden. This state is controlled by
     // clicking on the profile icon or username to display/hide user options like "Profile" and "Sign out."

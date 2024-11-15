@@ -9,7 +9,11 @@ import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
 import apiRoute from "./apiroutes";
+import { ProfilePopupVisbleContext } from "./context/categoryContext";
 const Dashboard = () => {
+
+    const {profilePopupVisible,setProfilePopupVisible}=useContext(ProfilePopupVisbleContext)
+
     const is765px = useMediaQuery({ minWidth: 765 })
     
     const is375px=useMediaQuery({maxWidth:375})
@@ -110,18 +114,24 @@ const Dashboard = () => {
 
     }, [])
     useEffect(() => {
-        const fetchapi = async () => {
+        const fetchAssignedQuery = async () => {
             try {
-                const response = await apiRoute.assigned_queries()
+                let response = await axios.get(`https://chat.roshni.online/api/clients/${Cookies.get("clientid")}/assigned/queries`, {
+                    headers: {
+                        "Authorization": `Bearer ${Cookies.get("token")}`
+                    }
+                }
+
+                )
+                // console.log(response.data.length)
                 console.log(response.data)
+                Cookies.set("Assigned", response.data.length, { expires: 7 })
+
             } catch (error) {
                 console.log(error)
             }
         }
-        fetchapi()
-
-        // console.log(response.data.length)
-        // Cookies.set("Assigned", response.data.length, { expires: 7 })
+        fetchAssignedQuery();
 
 
 
@@ -204,7 +214,7 @@ const Dashboard = () => {
             <div className={`${is765px ? " w-[100%] flex bg-[#ECF0F5]" : " w-[100%] "}`} onClick={getTheValue}>
                 <AsideComponent />
                 <div className="  bg-[#ECF0F5]">
-                    <Navbar />
+                    <Navbar  />
                     <ClientSectionMainHeader />
 
                     <div className={`flex flex-col justify-between  ${is1200px?"h-[81.846vh]":""} `}>
@@ -229,7 +239,7 @@ const Dashboard = () => {
                                         </div>
                                         <div className={`${is1200px?"mx-[2rem]":""} ${is1200px?"":"mt-[3.5vh]"} `} onClick={HandleAssignedQuery}>
                                             <div className={`h-[18vh] ${is1200px?"w-[17.9vw]":"w-[35.9vw]"} ${is765px?"":"w-[40.9vw]"} ${isFlexCardContent} bg-[#D81B60] text-white py-[0.35rem] px-[0.6rem] cursor-pointer `}>
-                                                <div className={`font-bold ${isTextSize}`}>{Cookies.get("Assigned") ?? "0"}</div>
+                                                <div className={`font-bold ${isTextSize}`}>{Cookies.get("Assigned") ? Cookies.get("Assigned"):"0"}</div>
                                                 <div className={`${isSizeCardUnderText}`}>Assigned Queries</div>
                                             </div>
                                             <button className={`${is1200px?"w-[17.9vw]":"w-[35.9vw]"} ${is765px?"":"w-[40.9vw]"} h-[5vh] bg-[#B81752] text-[white]/90 text-[0.9rem] flex items-center justify-center `} >

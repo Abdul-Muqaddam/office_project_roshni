@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { categoryContext } from "./context/categoryContext";
 import AsideComponent from "./asideComponent";
 import Navbar from "./navbar";
 import Footer from "./footer";

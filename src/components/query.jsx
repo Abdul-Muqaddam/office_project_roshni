@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
@@ -12,15 +12,15 @@ import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
 import { useMediaQuery } from "react-responsive";
+import { ProfilePopupVisbleContext } from "./context/categoryContext";
 const Query = () => {
+    const {profilePopupVisible,setProfilePopupVisible}=useContext(ProfilePopupVisbleContext)
     const navigate = useNavigate();
     // const userInfo=useSelector((state)=>state.user.userInfo)
     const location = useLocation()
     const [queries, setQueries] = useState("")
     const [filterQueries, setfilterQueries] = useState("")
     const [error, setError] = useState(false)
-
-    const [profilePopupVisible, setProfilePopupVisible] = useState(false);
 
     const is765px=useMediaQuery({minWidth:765})
     const isFlex=is765px?"flex":"";

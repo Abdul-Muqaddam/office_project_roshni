@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react";
+import React, { useContext, useEffect, useState, } from "react";
 import DataTable from "react-data-table-component";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -8,7 +8,9 @@ import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
 import { useMediaQuery } from "react-responsive";
+import { ProfilePopupVisbleContext } from "./context/categoryContext";
 const Completedquries = () => {
+    const {profilePopupVisible,setProfilePopupVisible}=useContext(ProfilePopupVisbleContext)
     const [data,setData]=useState([])
     const [filterData,setFilterData]=useState([])
     const [error,setError]=useState(false)
@@ -32,8 +34,7 @@ const Completedquries = () => {
             }
         }
         fetchapi()
-    },[])
-    const [profilePopupVisible,setProfilePopupVisible]=useState(false);  
+    },[])  
     // "isProfilePopupVisible" is used to toggle the display of the profile popup on the right side.
     // When true, the popup is shown; when false, the popup is hidden. This state is controlled by
     // clicking on the profile icon or username to display/hide user options like "Profile" and "Sign out."

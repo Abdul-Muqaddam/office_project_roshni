@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
@@ -11,17 +11,15 @@ import Navbar from "./navbar";
 import Footer from "./footer";
 import ClientSectionMainHeader from "./ClientSectionMainHeader";
 import { useMediaQuery } from "react-responsive";
+import { ProfilePopupVisbleContext } from "./context/categoryContext";
+
 const Assigned_queries = () => {
+    const {profilePopupVisible,setProfilePopupVisible}=useContext(ProfilePopupVisbleContext)
     const navigate = useNavigate();
     const [queries, setQueries] = useState([])
     const [filterQueries, setFilterQueries] = useState([])
     const location = useLocation()
     const [error, setError] = useState(false)
-
-
-    const [profilePopupVisible, setProfilePopupVisible] = useState(false);
-
-
     const is765px = useMediaQuery({ minWidth: 765 })
     const isFlex = is765px ? "flex" : "";
     // "isProfilePopupVisible" is used to toggle the display of the profile popup on the right side.

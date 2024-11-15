@@ -2,11 +2,13 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import Cookies from "js-cookie";
-import { categoryContext } from "./context/categoryContext";
+import { ProfilePopupVisbleContext } from "./context/categoryContext";
 import { useMediaQuery } from "react-responsive";
 const Login = () => {
     const is750px=useMediaQuery({minWidth:750})
     const is280px=useMediaQuery({minWidth:280})
+
+
 
     const navigate=useNavigate()
     // const dispatch=useDispatch();
